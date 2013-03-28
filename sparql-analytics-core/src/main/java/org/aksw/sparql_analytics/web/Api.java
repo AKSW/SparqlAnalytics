@@ -49,17 +49,26 @@ public class Api {
 		try {
 			//String startTime = new GregorianCalendar().getTi
 			Calendar cal = new GregorianCalendar();
-			cal.add(Calendar.HOUR, -24);
+			//cal.add(Calendar.HOUR, -24);
+			cal.add(Calendar.HOUR, -1);
 			Timestamp startTime = new Timestamp(cal.getTime().getTime());
 			
+//			String sql
+//				= "SELECT TO_CHAR(\"ts_start\", 'DAY:HH24') AS \"label\", MIN(\"ts_start\") As min, COUNT(*) AS \"count\"\n"
+//				+ "FROM \"request\"\n"
+//				+ "GROUP BY TO_CHAR(\"ts_start\", 'DAY:HH24')\n"
+//				+ "HAVING MIN(\"ts_start\") > '" + startTime + "'\n"
+//				+ "ORDER BY MIN(\"ts_start\") ASC"
+//				;
+
 			String sql
-				= "SELECT TO_CHAR(\"ts_start\", 'DAY:HH24') AS \"label\", MIN(\"ts_start\") As min, COUNT(*) AS \"count\"\n"
-				+ "FROM \"request\"\n"
-				+ "GROUP BY TO_CHAR(\"ts_start\", 'DAY:HH24')\n"
-				+ "HAVING MIN(\"ts_start\") > '" + startTime + "'\n"
-				+ "ORDER BY MIN(\"ts_start\") ASC"
-				;
-				
+			= "SELECT TO_CHAR(\"ts_start\", 'DAY:HH24:MI') AS \"label\", MIN(\"ts_start\") As min, COUNT(*) AS \"count\"\n"
+			+ "FROM \"request\"\n"
+			+ "GROUP BY TO_CHAR(\"ts_start\", 'DAY:HH24:MI')\n"
+			+ "HAVING MIN(\"ts_start\") > '" + startTime + "'\n"
+			+ "ORDER BY MIN(\"ts_start\") ASC"
+			;
+
 		
 			System.out.println(sql);
 			

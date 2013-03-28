@@ -97,11 +97,11 @@ public class RestServiceMain {
 		*/
 		
 		cpConfig.setMinConnectionsPerPartition(1);
-		cpConfig.setMaxConnectionsPerPartition(3);
+		cpConfig.setMaxConnectionsPerPartition(6);
 //		cpConfig.setMinConnectionsPerPartition(1);
 //		cpConfig.setMaxConnectionsPerPartition(1);
 		
-		cpConfig.setPartitionCount(1);
+		cpConfig.setPartitionCount(2);
 		//BoneCP connectionPool = new BoneCP(cpConfig); // setup the connection pool	
 
 		BoneCPDataSource dataSource = new BoneCPDataSource(cpConfig);

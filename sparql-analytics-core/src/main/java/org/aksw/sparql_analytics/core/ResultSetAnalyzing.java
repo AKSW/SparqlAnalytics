@@ -97,6 +97,7 @@ public class ResultSetAnalyzing
 	}
 	
 	public static void analyze(Map<Var, Node> map, Map<Node, Integer> nodeToUsage) {
+		System.out.println("Binding: " + map);
 		for(Entry<Var, Node> entry : map.entrySet()) {
 			//Var var = entry.getKey();			
 			Node node = entry.getValue();

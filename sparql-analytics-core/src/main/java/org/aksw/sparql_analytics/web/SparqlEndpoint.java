@@ -142,7 +142,7 @@ public class SparqlEndpoint
 		data.put("serviceUri", serviceUri);
 		
 		// TODO: Wrap with analytics stuff
-		QueryExecutionFactory qef = new QueryExecutionFactoryHttp("http://dbpedia.org/sparql");
+		QueryExecutionFactory qef = new QueryExecutionFactoryHttp(serviceUri);
 		
 		//QueryExecutionFactoryAnalytics analytics = new QueryExecutionFactoryAnalytics(tmp, metadata);
 		
