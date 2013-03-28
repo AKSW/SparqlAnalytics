@@ -134,6 +134,7 @@ public class SparqlEndpoint
 		}
 		 
 		
+		System.out.println("Query: " + query);
 		
 		data.put("query", query);
 		data.put("queryString", queryString);

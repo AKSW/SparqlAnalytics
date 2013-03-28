@@ -52,7 +52,7 @@ public class Backend {
 		Map<String, Integer> nodeToUsage = (Map<String, Integer>)data.get("nodeToUsage");
 		
 
-		String requestId = StringUtils.md5Hash(requestTime.getTime() + ":" + query);
+		String requestId = StringUtils.md5Hash(System.nanoTime() + ":" + query);
 
 		Connection conn = dataSource.getConnection();
 		ColumnsReference requestTable = new ColumnsReference("request", "id", "ts_start", "user_id", "service_id", "query_id", "item_count");
