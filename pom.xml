@@ -17,26 +17,25 @@
 
 
 	<properties>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
 
-		<gwt.version>2.0.4</gwt.version>
-
-		<jetty.version>7.1.6.v20100715</jetty.version>
-
-		<!-- project defaults -->
-		<java.version>1.6</java.version>
-		<java.version.javadoc>http://java.sun.com/javase/6/docs/api/</java.version.javadoc>
-		<file.encoding>UTF-8</file.encoding>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-
+		<!-- Dependency Versions -->
+ 		<jetty.version>9.0.0.v20130308</jetty.version>
+		<jetty-plugin.version>8.1.10.v20130312</jetty-plugin.version>
+<!-- 		<org.mortbay.jetty.version>7.0.0.pre5</org.mortbay.jetty.version> -->
 		<jersey.version>1.8</jersey.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<aksw.commons.version>0.5-SNAPSHOT</aksw.commons.version>
+		<atmosphere.version>1.0.12</atmosphere.version>
+		
 
-		<platform.linkedData.contextPath>/</platform.linkedData.contextPath>
+		<!-- Project Settings -->
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<java.version>1.7</java.version>
+		<java.version.javadoc>http://docs.oracle.com/javase/7/docs/api/</java.version.javadoc>
+		<file.encoding>UTF-8</file.encoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<scm>
@@ -106,21 +105,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr3-maven-plugin</artifactId>
-				<version>3.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>antlr</goal>
-						</goals>
-						<configuration>
-							<debug>false</debug>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>
@@ -144,7 +128,7 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.6.v20120903</version>
+				<version>${jetty-plugin.version}</version>
 				<configuration>
 					<systemProperties>
 						<systemProperty>
@@ -229,93 +213,78 @@
 
 	<dependencyManagement>
 		<dependencies>
+		
+			<!-- Self dependencies -->
 			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty</artifactId>
-				<version>7.0.0.pre5</version>
-				<type>jar</type>
-				<scope>compile</scope>
+				<groupId>org.aksw.sparql-analytics</groupId>
+				<artifactId>sparql-analytics-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		
+
+			<!-- Jena SPARQL API -->		
+			<dependency>
+				<groupId>org.aksw.jena-sparql-api</groupId>
+				<artifactId>jena-sparql-api-server</artifactId>
+				<version>0.6-SNAPSHOT</version>
 			</dependency>
 
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-core</artifactId>
-				<version>1.8</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-server</artifactId>
-				<version>1.8</version>
-			</dependency>
+			<!-- Atmosphere framework -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.atmosphere</groupId> -->
+<!-- 				<artifactId>atmosphere-runtime</artifactId> -->
+<!-- 				<version>${atmosphere.version}</version> -->
+<!-- 			</dependency>		 -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.atmosphere</groupId> -->
+<!-- 				<artifactId>atmosphere-jersey</artifactId> -->
+<!-- 				<version>${atmosphere.version}</version> -->
+<!-- 			</dependency> -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>com.sun.jersey</groupId> -->
+<!-- 				<artifactId>jersey-json</artifactId> -->
+<!-- 				<version>${jersey.version}</version> -->
+<!-- 			</dependency> -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.atmosphere</groupId> -->
+<!-- 				<artifactId>atmosphere-jquery</artifactId> -->
+<!-- 				<version>${atmosphere.version}</version> -->
+<!-- 				<type>war</type> -->
+<!-- 			</dependency> -->
 
-			<dependency>
-				<groupId>org.aksw.sparqlify</groupId>
-				<artifactId>sparqlify-core</artifactId>
-				<version>0.2-SNAPSHOT</version>
-			</dependency>
+			<!-- Jetty -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.eclipse.jetty</groupId> -->
+<!-- 				<artifactId>jetty-server</artifactId> -->
+<!-- 				<version>${jetty.version}</version> -->
+<!-- 				<type>jar</type> -->
+<!-- 				<scope>compile</scope> -->
+<!-- 			</dependency> -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.eclipse.jetty</groupId> -->
+<!-- 				<artifactId>jetty-servlet</artifactId> -->
+<!-- 				<version>${jetty.version}</version> -->
+<!-- 				<type>jar</type> -->
+<!-- 				<scope>compile</scope> -->
+<!-- 			</dependency> -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.eclipse.jetty</groupId> -->
+<!-- 				<artifactId>jetty-http</artifactId> -->
+<!-- 				<version>${jetty.version}</version> -->
+<!-- 				<type>jar</type> -->
+<!-- 				<scope>compile</scope> -->
+<!-- 			</dependency> -->
 
-			<!-- <dependency> -->
-			<!-- <groupId>org.aksw.sparqlify</groupId> -->
-			<!-- <artifactId>sparqlify-server</artifactId> -->
-			<!-- <version>${project.version}</version> -->
-			<!-- <type>war</type> -->
-			<!-- </dependency> -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.eclipse.jetty</groupId> -->
+<!-- 				<artifactId>jetty-websocket</artifactId> -->
+<!-- 				<version>${jetty.version}</version> -->
+<!-- 				<type>jar</type> -->
+<!-- 				<scope>compile</scope> -->
+<!-- 			</dependency> -->
+			
 
-
-			<!-- <dependency> -->
-			<!-- <groupId>org.aksw.sparqlify</groupId> -->
-			<!-- <artifactId>sparqlify-platform</artifactId> -->
-			<!-- <version>${project.version}</version> -->
-			<!-- </dependency> -->
-
-
-
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-core</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-server</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-
-			<!-- <dependency> <groupId>org.aksw.commons</groupId> <artifactId>commons</artifactId> 
-				<version>1.0-SNAPSHOT</version> <scope>compile</scope> </dependency> -->
-			<dependency>
-				<groupId>org.aksw.commons</groupId>
-				<artifactId>util</artifactId>
-				<version>${aksw.commons.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.aksw.commons</groupId>
-				<artifactId>sparql</artifactId>
-				<version>${aksw.commons.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.aksw.commons</groupId>
-				<artifactId>collections</artifactId>
-				<version>${aksw.commons.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.jolbox</groupId>
-				<artifactId>bonecp</artifactId>
-				<version>0.7.1.RELEASE</version>
-			</dependency>
-			<!-- <dependency> -->
-			<!-- <groupId>com.jamonapi</groupId> -->
-			<!-- <artifactId>jamon</artifactId> -->
-			<!-- <version>2.7</version> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>net.sourceforge.secondstring</groupId> -->
-			<!-- <artifactId>secondstring</artifactId> -->
-			<!-- <version>20060615</version> -->
-			<!-- </dependency> -->
+			<!-- Logging -->
 			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
@@ -323,87 +292,60 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			<!-- <dependency> -->
-			<!-- <groupId>org.mod4j.org.apache.commons</groupId> -->
-			<!-- <artifactId>cli</artifactId> -->
-			<!-- <version>1.0.0</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
 			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>2.4</version>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.0</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>commons-cli</groupId>
-				<artifactId>commons-cli</artifactId>
-				<version>1.2</version>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-ext</artifactId>
+				<version>1.6.0</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>commons-validator</groupId>
-				<artifactId>commons-validator</artifactId>
-				<version>1.4.0</version>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.6.0</version>
 				<type>jar</type>
-				<scope>compile</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-beanutils</groupId>
-						<artifactId>commons-beanutils</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<!-- commons-validator depends on commons-beanutils, which in turn depend 
-				on commons-beanutils-bean-collections. The latter conflicts with commons-collections, 
-				because of overlap in defined classes -->
-			<dependency>
-				<groupId>commons-beanutils</groupId>
-				<artifactId>commons-beanutils-core</artifactId>
-				<version>1.8.3</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-beanutils</groupId>
-						<artifactId>commons-beanutils-bean-collections</artifactId>
-					</exclusion>
-				</exclusions>
+				<scope>runtime</scope>
 			</dependency>
 
 
 
+
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.aksw.sparqlify</groupId> -->
+<!-- 				<artifactId>sparqlify-core</artifactId> -->
+<!-- 				<version>0.2-SNAPSHOT</version> -->
+<!-- 			</dependency> -->
+
+
+			<!-- AKSW Commons -->
 			<dependency>
-				<groupId>net.sourceforge.collections</groupId>
-				<artifactId>collections-generic</artifactId>
-				<version>4.01</version>
-				<type>jar</type>
+				<groupId>org.aksw.commons</groupId>
+				<artifactId>util</artifactId>
+				<version>${aksw.commons.version}</version>
 				<scope>compile</scope>
 			</dependency>
-			<!-- <dependency> -->
-			<!-- <groupId>org.ini4j</groupId> -->
-			<!-- <artifactId>ini4j</artifactId> -->
-			<!-- <version>0.5.1</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>javax.mail</groupId> -->
-			<!-- <artifactId>mail</artifactId> -->
-			<!-- <version>1.4.1</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>org.codehaus.groovy</groupId> -->
-			<!-- <artifactId>groovy</artifactId> -->
-			<!-- <version>1.7.2</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
-
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.aksw.commons</groupId> -->
+<!-- 				<artifactId>sparql</artifactId> -->
+<!-- 				<version>${aksw.commons.version}</version> -->
+<!-- 				<scope>compile</scope> -->
+<!-- 			</dependency> -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.aksw.commons</groupId> -->
+<!-- 				<artifactId>collections</artifactId> -->
+<!-- 				<version>${aksw.commons.version}</version> -->
+<!-- 				<scope>compile</scope> -->
+<!-- 			</dependency> -->
+			
+			
+			<!-- Database Connectivity -->
 			<dependency>
 				<groupId>postgresql</groupId>
 				<artifactId>postgresql</artifactId>
@@ -418,163 +360,66 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
+			
+			
+			<!-- JDBC Connection Pooling -->
+			<dependency>
+				<groupId>com.jolbox</groupId>
+				<artifactId>bonecp</artifactId>
+				<version>0.7.1.RELEASE</version>
+			</dependency>
+			
 
 			<!-- <dependency> -->
-			<!-- <groupId>commons-compress</groupId> -->
-			<!-- <artifactId>commons-compress</artifactId> -->
-			<!-- <version>20050911</version> -->
+			<!-- <groupId>com.jamonapi</groupId> -->
+			<!-- <artifactId>jamon</artifactId> -->
+			<!-- <version>2.7</version> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>net.sourceforge.secondstring</groupId> -->
+			<!-- <artifactId>secondstring</artifactId> -->
+			<!-- <version>20060615</version> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>org.mod4j.org.apache.commons</groupId> -->
+			<!-- <artifactId>cli</artifactId> -->
+			<!-- <version>1.0.0</version> -->
 			<!-- <type>jar</type> -->
 			<!-- <scope>compile</scope> -->
 			<!-- </dependency> -->
-
+			
+			
+			<!-- Used for SQL-Escapting (StringEscapeUtils) -->
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>1.6.0</version>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.4</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
+
+
+			<!-- Command Line Argument Parsing -->
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.6.0</version>
-				<type>jar</type>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-ext</artifactId>
-				<version>1.6.0</version>
+				<groupId>commons-cli</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>1.2</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			<dependency>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-				<version>3.2.1</version>
-			</dependency>
-
-			<!-- <dependency> -->
-			<!-- <groupId>org.hsqldb</groupId> -->
-			<!-- <artifactId>hsqldb</artifactId> -->
-			<!-- <version>2.0.0</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.thoughtworks.xstream</groupId> -->
-			<!-- <artifactId>xstream</artifactId> -->
-			<!-- <version>1.3.1</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
+			
 
 
-			<!-- <dependency> -->
-			<!-- <groupId>org.apache.derby</groupId> -->
-			<!-- <artifactId>derby</artifactId> -->
-			<!-- <version>10.6.1.0</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
+<!-- Not sure if we need this for getting Jena to work -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>xerces</groupId> -->
+<!-- 				<artifactId>xercesImpl</artifactId> -->
+<!-- 				<version>2.10.0</version> -->
+<!-- 				<scope>runtime</scope> -->
+<!-- 			</dependency> -->
+	
 
-
-			<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-top</artifactId> 
-				<version>0-incubating</version> <scope>compile</scope> </dependency> -->
-
-			<dependency>
-				<groupId>xerces</groupId>
-				<artifactId>xercesImpl</artifactId>
-				<version>2.10.0</version>
-				<scope>runtime</scope>
-			</dependency>
-			<!-- <exclusions> -->
-			<!-- <exclusion> -->
-			<!-- <groupId>xerces</groupId> -->
-			<!-- <artifactId>xercesImpl</artifactId> -->
-			<!-- </exclusion> -->
-			<!-- </exclusions> -->
-
-
-			<!-- jena-sdb depends on xerces:xercesImpl:jar:2.7.1 and breaks with newer 
-				version - -> <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-core</artifactId> 
-				<version>2.7.0-incubating</version> <scope>compile</scope> </dependency> 
-				<dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-arq</artifactId> 
-				<version>2.9.0-incubating</version> <scope>compile</scope> </dependency> -->
-			<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-iri</artifactId> 
-				<version>0.9.0-incubating</version> <scope>compile</scope> </dependency> -->
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>jena-arq</artifactId>
-				<version>2.9.0-incubating</version>
-				<scope>compile</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>jena-core</artifactId>
-				<version>2.7.0-incubating</version>
-				<scope>compile</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>jena-iri</artifactId>
-				<version>0.9.0-incubating</version>
-				<scope>compile</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-
-			<dependency>
-				<groupId>com.hp.hpl.jena</groupId>
-				<artifactId>sdb</artifactId>
-				<version>1.3.4</version>
-				<type>jar</type>
-				<scope>compile</scope>
-
-				<exclusions>
-					<exclusion>
-						<groupId>com.hp.hpl.jena</groupId>
-						<artifactId>jena</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.hp.hpl.jena</groupId>
-						<artifactId>iri</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.hp.hpl.jena</groupId>
-						<artifactId>arq</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-
-			<!-- <dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>arq</artifactId> 
-				<version>2.8.8</version> <type>jar</type> <scope>compile</scope> </dependency> 
-				<dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>arq-extra</artifactId> 
-				<version>2.7.0</version> <type>jar</type> <scope>compile</scope> </dependency> 
-				<dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>jena</artifactId> 
-				<version>2.6.4</version> <type>jar</type> <scope>compile</scope> </dependency> 
-				<dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>sdb</artifactId> 
-				<version>1.3.4</version> <type>jar</type> <scope>compile</scope> </dependency> 
-				<dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>tdb</artifactId> 
-				<version>0.8.9</version> <type>jar</type> <scope>compile</scope> </dependency> -->
+			<!-- Collection Libraries -->
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
@@ -583,88 +428,41 @@
 				<scope>compile</scope>
 			</dependency>
 
-			<dependency>
-				<groupId>code.google.com</groupId>
-				<artifactId>patricia-trie</artifactId>
-				<version>0.6</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
 
-			<!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
-				<version>5.1.16</version> <type>jar</type> <scope>compile</scope> </dependency> -->
-			<dependency>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr-runtime</artifactId>
-				<version>3.4</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>jrexx</groupId>
-				<artifactId>jrexx</artifactId>
-				<version>1.1.1</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
+				
 
+			<!-- Spring Framework -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.springframework</groupId> -->
+<!-- 				<artifactId>spring-core</artifactId> -->
+<!-- 				<version>${spring.version}</version> -->
+<!-- 			</dependency> -->
 
-			<dependency>
-				<groupId>net.sf.opencsv</groupId>
-				<artifactId>opencsv</artifactId>
-				<version>2.3</version>
-			</dependency>
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.springframework</groupId> -->
+<!-- 				<artifactId>spring-context</artifactId> -->
+<!-- 				<version>${spring.version}</version> -->
+<!-- 			</dependency> -->
 
-			<dependency>
-				<groupId>net.sourceforge.jexcelapi</groupId>
-				<artifactId>jxl</artifactId>
-				<version>2.6.12</version>
-			</dependency>
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.springframework</groupId> -->
+<!-- 				<artifactId>spring-web</artifactId> -->
+<!-- 				<version>${spring.version}</version> -->
+<!-- 			</dependency> -->
 
-			<!-- H2 Tools have features for creating MySQL result sets from CSV/TSV 
-				files -->
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<version>1.3.170</version>
-			</dependency>
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.springframework</groupId> -->
+<!-- 				<artifactId>spring-beans</artifactId> -->
+<!-- 				<version>${spring.version}</version> -->
+<!-- 			</dependency> -->
 
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.sun.jersey.contribs</groupId>
-				<artifactId>jersey-spring</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.tuckey</groupId>
-				<artifactId>urlrewritefilter</artifactId>
-				<version>4.0.3</version>
-			</dependency>
+			<!-- URL Rewriting -->
+<!-- 			<dependency> -->
+<!-- 				<groupId>org.tuckey</groupId> -->
+<!-- 				<artifactId>urlrewritefilter</artifactId> -->
+<!-- 				<version>4.0.3</version> -->
+<!-- 			</dependency> -->
 
 			<!-- Gson: Java to Json conversion -->
 			<dependency>
@@ -681,13 +479,6 @@
 				<scope>test</scope>
 			</dependency>
 
-			<!-- <dependency> -->
-			<!-- <groupId>c3p0</groupId> -->
-			<!-- <artifactId>c3p0</artifactId> -->
-			<!-- <version>0.9.1.2</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
 		</dependencies>
 	</dependencyManagement>
 

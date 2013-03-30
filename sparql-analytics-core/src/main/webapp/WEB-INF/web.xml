@@ -4,29 +4,49 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
 
-<!--
-	<resource-ref>
-		<description>Sparqlify Reference</description>
-		<res-ref-name>jdbc/DS-Sparqlify</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-	</resource-ref>
--->
+	<!-- <resource-ref> <description>Sparqlify Reference</description> <res-ref-name>jdbc/DS-Sparqlify</res-ref-name> 
+		<res-type>javax.sql.DataSource</res-type> <res-auth>Container</res-auth> 
+		</resource-ref> -->
 
 
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>Jersey Web Application</servlet-name> -->
+<!-- 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class> -->
+<!-- 		<init-param> -->
+<!-- 			<param-name>com.sun.jersey.config.property.packages</param-name> -->
+
+<!-- 			<!--You need to change this line to match your package name --> -->
+<!-- 			<param-value>org.aksw.sparql_analytics.web</param-value> -->
+<!-- 		</init-param> -->
+<!-- 		<load-on-startup>1</load-on-startup> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>Jersey Web Application</servlet-name> -->
+<!-- <!-- 		<url-pattern>/*</url-pattern> --> -->
+<!-- 		<url-pattern>/foo/*</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
+
+	<!-- Atmosphere -->
 	<servlet>
-		<servlet-name>Jersey Web Application</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<description>AtmosphereServlet</description>
+		<servlet-name>AtmosphereServlet</servlet-name>
+		<servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
-
-			<!--You need to change this line to match your package name -->
-			<param-value>org.aksw.sparql_analytics.web</param-value>
+			<param-value>org.mappush</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Jersey Web Application</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<servlet-name>AtmosphereServlet</servlet-name>
+		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
+
+
+
 </web-app>

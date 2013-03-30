@@ -33,13 +33,12 @@ public class Api {
 		}
 	}
 
-	
 	@GET
 	@Path("/min")
 	@Produces({MediaType.APPLICATION_JSON, "application/sparql-results+json"})
 	public String createMinuteSummary(@Context HttpServletRequest req)
 			throws Exception {
-		
+
 		Connection conn = dataSource.getConnection();
 		
 		

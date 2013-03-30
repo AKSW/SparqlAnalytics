@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.aksw.commons.sparql.api.cache.extra.SqlUtils;
 import org.aksw.commons.util.jdbc.ColumnsReference;
 import org.aksw.commons.util.jdbc.PrimaryKey;
 import org.aksw.commons.util.jdbc.Schema;
+import org.aksw.jena_sparql_api.cache.extra.SqlUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 

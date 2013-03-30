@@ -2,9 +2,10 @@ package org.aksw.sparql_analytics.core;
 
 import java.util.Map;
 
-import org.aksw.commons.sparql.api.core.QueryExecutionFactory;
-import org.aksw.commons.sparql.api.core.QueryExecutionFactoryWrapper;
-import org.aksw.commons.sparql.api.core.QueryExecutionStreaming;
+import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
+import org.aksw.jena_sparql_api.core.QueryExecutionFactoryWrapper;
+
+import com.hp.hpl.jena.query.QueryExecution;
 
 
 public class QueryExecutionFactoryAnalytics
@@ -21,8 +22,8 @@ public class QueryExecutionFactoryAnalytics
 	}
 
 	@Override
-	protected QueryExecutionStreaming wrap(QueryExecutionStreaming qe) {
-		QueryExecutionStreaming result = new QueryExecutionAnalytics(qe);
+	protected QueryExecution wrap(QueryExecution qe) {
+		QueryExecution result = new QueryExecutionAnalytics(qe);
 		return result;
 	}
 }

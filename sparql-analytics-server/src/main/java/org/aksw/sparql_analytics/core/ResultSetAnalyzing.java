@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.aksw.commons.sparql.api.core.ResultSetClosable;
-import org.openjena.atlas.lib.MapUtils;
+import org.aksw.jena_sparql_api.core.ResultSetClosable;
+import org.apache.jena.atlas.lib.MapUtils;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.query.QuerySolution;

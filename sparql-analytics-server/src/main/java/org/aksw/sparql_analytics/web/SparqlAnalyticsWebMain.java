@@ -1,15 +1,14 @@
 package org.aksw.sparql_analytics.web;
 
-import org.aksw.commons.util.jdbc.JdbcUtils;
 import org.aksw.sparql_analytics.core.Backend;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +18,18 @@ import com.jolbox.bonecp.BoneCPDataSource;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 
-public class RestServiceMain {
+public class SparqlAnalyticsWebMain {
 	/**
 	 * @param exitCode
 	 */
 	public static void printHelpAndExit(int exitCode) {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(RestServiceMain.class.getName(), cliOptions);
+		formatter.printHelp(SparqlAnalyticsWebMain.class.getName(), cliOptions);
 		System.exit(exitCode);
 	}
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(RestServiceMain.class);
+			.getLogger(SparqlAnalyticsWebMain.class);
 	private static final Options cliOptions = new Options();
 
 	/**
@@ -127,11 +126,26 @@ public class RestServiceMain {
 				"org.aksw.sparql_analytics.web");
 
 		Server server = new Server(port);
-		Context context = new Context(server, "/", Context.SESSIONS);
-		context.addServlet(sh, "/*");
+
+
+		ServletHolder sh2 = new ServletHolder(ServletContainer.class);
+		sh2.setHeldClass(org.atmosphere.cpr.AtmosphereServlet.class);
+		sh2.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
+		sh2.setInitParameter(
+				"com.sun.jersey.config.property.resourceConfigClass",
+				"com.sun.jersey.api.core.PackagesResourceConfig");
+		sh2.setInitParameter("com.sun.jersey.config.property.packages",
+				"org.mappush.resource");
+
+		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		context.setContextPath("/");
+		server.setHandler(context);
+		//Context context = new Context(server, "/", Context.SESSIONS);
+		//context.addServlet(sh, "/*");
 		
-		
-		
+
+		context.addServlet(sh2, "/*");
+
 		
 		context.setAttribute("backend", backend);
 		context.setAttribute("dataSource", dataSource);

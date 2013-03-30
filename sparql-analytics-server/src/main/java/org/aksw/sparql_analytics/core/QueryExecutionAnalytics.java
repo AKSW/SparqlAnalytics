@@ -1,16 +1,16 @@
 package org.aksw.sparql_analytics.core;
 
-import org.aksw.commons.sparql.api.core.QueryExecutionStreaming;
-import org.aksw.commons.sparql.api.core.QueryExecutionStreamingDecorator;
+import org.aksw.jena_sparql_api.core.QueryExecutionDecorator;
 
+import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.ResultSet;
 
 public class QueryExecutionAnalytics
-	extends QueryExecutionStreamingDecorator
+	extends QueryExecutionDecorator
 {
 	private Runnable onCloseHandler = null;
 
-	public QueryExecutionAnalytics(QueryExecutionStreaming decoratee) {
+	public QueryExecutionAnalytics(QueryExecution decoratee) {
 		super(decoratee);
 	}
 

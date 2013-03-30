@@ -1,7 +1,5 @@
 package org.aksw.sparql_analytics.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -12,16 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 
-import org.aksw.commons.sparql.api.core.QueryExecutionFactory;
-import org.aksw.commons.sparql.api.core.QueryExecutionStreaming;
-import org.aksw.commons.sparql.api.http.QueryExecutionFactoryHttp;
+import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
+import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
+import org.aksw.jena_sparql_api.utils.UriUtils;
+import org.aksw.jena_sparql_api.web.SparqlEndpointBase;
 import org.aksw.sparql_analytics.core.Backend;
 import org.aksw.sparql_analytics.core.QueryExecutionAnalytics;
 import org.aksw.sparql_analytics.core.ResultSetAnalyzing;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
 
 
 
@@ -47,38 +46,6 @@ public class SparqlEndpoint
 	}
 
 	
-	/**
-	 * TODO Add to utils
-	 * 
-	 * @param url
-	 * @return
-	 * @throws UnsupportedEncodingException 
-	 */
-	public static Multimap<String, String> parseQueryString(String queryString) {
-		try {
-			return parseQueryStringEx(queryString);
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	public static Multimap<String, String> parseQueryStringEx(String queryString)
-			throws UnsupportedEncodingException
-	{
-        Multimap<String, String> result = ArrayListMultimap.create();
-	    
-        for (String param : queryString.split("&")) {
-	        String pair[] = param.split("=");
-	        String key = URLDecoder.decode(pair[0], "UTF-8");
-	        String value = "";
-	        if (pair.length > 1) {
-	            value = URLDecoder.decode(pair[1], "UTF-8");
-	        }
-	        result.put(new String(key), new String(value));
-	    }
-	    
-        return result;	
-	}
 	
 	/*
 	public static Multimap<String, String> parseQueryString(String url) {
@@ -107,10 +74,10 @@ public class SparqlEndpoint
 	
 	
 	@Override
-	public QueryExecutionStreaming createQueryExecution(final Query query, @Context HttpServletRequest req) {
+	public QueryExecution createQueryExecution(final Query query, @Context HttpServletRequest req) {
 		
 		
-		Multimap<String, String> qs = parseQueryString(req.getQueryString());
+		Multimap<String, String> qs = UriUtils.parseQueryString(req.getQueryString());
 		
 		// Collect all interesting Metadata and write it into a GSON object
 		final Map<String, Object> data = new HashMap<String, Object>();
@@ -147,7 +114,7 @@ public class SparqlEndpoint
 		
 		//QueryExecutionFactoryAnalytics analytics = new QueryExecutionFactoryAnalytics(tmp, metadata);
 		
-		QueryExecutionStreaming qe = qef.createQueryExecution(query);
+		QueryExecution qe = qef.createQueryExecution(query);
 		
 		final QueryExecutionAnalytics result = new QueryExecutionAnalytics(qe);
 
