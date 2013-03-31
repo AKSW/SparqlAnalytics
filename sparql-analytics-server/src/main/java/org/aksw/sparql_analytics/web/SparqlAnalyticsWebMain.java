@@ -107,27 +107,23 @@ public class SparqlAnalyticsWebMain {
 
 		Backend backend = new Backend(dataSource);
 
-		
-		ServletHolder sh = new ServletHolder(ServletContainer.class);
 
-		
-		/*
-		 * For 0.8 and later the "com.sun.ws.rest" namespace has been renamed to
-		 * "com.sun.jersey". For 0.7 or early use the commented out code instead
-		 */
-		// sh.setInitParameter("com.sun.ws.rest.config.property.resourceConfigClass",
-		// "com.sun.ws.rest.api.core.PackagesResourceConfig");
-		// sh.setInitParameter("com.sun.ws.rest.config.property.packages",
-		// "jetty");
+		Server server = new Server(port);
+
+		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		context.setContextPath("/");
+		server.setHandler(context);
+
+		ServletHolder sh = new ServletHolder(org.atmosphere.cpr.AtmosphereServlet.class); //ServletContainer.class);
 		sh.setInitParameter(
 				"com.sun.jersey.config.property.resourceConfigClass",
 				"com.sun.jersey.api.core.PackagesResourceConfig");
 		sh.setInitParameter("com.sun.jersey.config.property.packages",
 				"org.aksw.sparql_analytics.web");
 
-		Server server = new Server(port);
+		context.addServlet(sh, "/*");
 
-
+		/*
 		ServletHolder sh2 = new ServletHolder(ServletContainer.class);
 		sh2.setHeldClass(org.atmosphere.cpr.AtmosphereServlet.class);
 		sh2.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
@@ -136,15 +132,8 @@ public class SparqlAnalyticsWebMain {
 				"com.sun.jersey.api.core.PackagesResourceConfig");
 		sh2.setInitParameter("com.sun.jersey.config.property.packages",
 				"org.mappush.resource");
-
-		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-		context.setContextPath("/");
-		server.setHandler(context);
-		//Context context = new Context(server, "/", Context.SESSIONS);
-		//context.addServlet(sh, "/*");
-		
-
 		context.addServlet(sh2, "/*");
+		*/
 
 		
 		context.setAttribute("backend", backend);

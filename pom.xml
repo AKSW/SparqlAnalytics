@@ -19,6 +19,8 @@
 	<properties>
 
 		<!-- Dependency Versions -->
+		<jena-sparql-api.version>0.6.0-SNAPSHOT</jena-sparql-api.version>
+		
  		<jetty.version>9.0.0.v20130308</jetty.version>
 		<jetty-plugin.version>8.1.10.v20130312</jetty-plugin.version>
 <!-- 		<org.mortbay.jetty.version>7.0.0.pre5</org.mortbay.jetty.version> -->
@@ -225,8 +227,13 @@
 			<!-- Jena SPARQL API -->		
 			<dependency>
 				<groupId>org.aksw.jena-sparql-api</groupId>
+				<artifactId>jena-sparql-api-core</artifactId>
+				<version>${jena-sparql-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aksw.jena-sparql-api</groupId>
 				<artifactId>jena-sparql-api-server</artifactId>
-				<version>0.6-SNAPSHOT</version>
+				<version>${jena-sparql-api.version}</version>
 			</dependency>
 
 			<!-- Atmosphere framework -->

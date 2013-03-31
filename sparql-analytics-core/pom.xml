@@ -21,6 +21,11 @@
 
 
 	<dependencies>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-core</artifactId>
+		</dependency>	
+	
 			<!-- Atmosphere framework -->
 <!-- 			<dependency> -->
 <!-- 				<groupId>org.atmosphere</groupId> -->

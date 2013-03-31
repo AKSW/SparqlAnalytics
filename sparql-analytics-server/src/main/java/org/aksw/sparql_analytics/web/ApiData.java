@@ -19,14 +19,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.atmosphere.cpr.BroadcasterFactory;
+
 import com.google.gson.Gson;
 
-@Path("/api")
-public class Api {
+@Path("/api/data")
+public class ApiData {
 
+	
 	private DataSource dataSource;
 	
-	public Api(@Context ServletContext context) {
+	public ApiData(@Context ServletContext context) {
 		this.dataSource = (DataSource)context.getAttribute("dataSource");
 		if(dataSource == null) {
 			throw new NullPointerException("Data source was not set");
