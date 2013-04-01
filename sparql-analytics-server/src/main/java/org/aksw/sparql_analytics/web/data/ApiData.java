@@ -1,4 +1,4 @@
-package org.aksw.sparql_analytics.web;
+package org.aksw.sparql_analytics.web.data;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,22 +19,52 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.atmosphere.cpr.BroadcasterFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
 
-@Path("/api/data")
-public class ApiData {
+@Configuration
+@Path("/data")
+public class ApiData
+	implements ApplicationContextAware
+{
+	/*
+	 * Workaround for not getting injection working - Hopefully we get rid of that soon
+	 */
+	private ApplicationContext ctx = null;
 
+	@Override
+	public void setApplicationContext(ApplicationContext ctx)
+			throws BeansException {
+		this.ctx = ctx;
+		
+		this.dataSource = (DataSource)ctx.getBean("sparqlAnalytics.backend.dataSource");
+	}
+	
 	
 	private DataSource dataSource;
+
+//	public void setDataSource(DataSource dataSource) {
+//		this.dataSource = dataSource;
+//	}
+//	
+//	public DataSource getDataSource() {
+//		return dataSource;
+//	}
+
 	
-	public ApiData(@Context ServletContext context) {
-		this.dataSource = (DataSource)context.getAttribute("dataSource");
-		if(dataSource == null) {
-			throw new NullPointerException("Data source was not set");
-		}
+	
+	public ApiData() {//@Context ServletContext context) {
+//		this.dataSource = (DataSource)context.getAttribute("dataSource");
+//		if(dataSource == null) {
+//			throw new NullPointerException("Data source was not set");
+//		}
 	}
+	
+	
 
 	@GET
 	@Path("/min")
@@ -42,6 +72,10 @@ public class ApiData {
 	public String createMinuteSummary(@Context HttpServletRequest req)
 			throws Exception {
 
+		if(dataSource == null) {
+			throw new RuntimeException("DataSource not set.");
+		}
+		
 		Connection conn = dataSource.getConnection();
 		
 		

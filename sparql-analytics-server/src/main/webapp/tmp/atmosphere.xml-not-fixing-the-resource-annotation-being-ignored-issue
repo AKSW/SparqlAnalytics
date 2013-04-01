@@ -1,0 +1,9 @@
+<atmosphere-handlers>
+        <atmosphere-handler context-root="/"
+                class-name="org.atmosphere.handler.ReflectorServletProcessor">
+                <property name="servletClass" value="com.sun.jersey.spi.spring.container.servlet.SpringServlet" />
+                <!-- apply spring security -->
+<!--                 <property name="filterClassName" value="org.springframework.web.filter.DelegatingFilterProxy"/> -->
+                <property name="filterName" value="springSecurityFilterChain"/>
+        </atmosphere-handler>
+</atmosphere-handlers>

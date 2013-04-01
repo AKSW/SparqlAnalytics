@@ -1,0 +1,25 @@
+#map {
+	position: relative;
+}
+
+#map-canvas {
+	height: 300px;
+}
+
+#map-stats {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	margin-bottom: 30px;
+	margin-right: 10px;
+	text-align: right;
+	display: none;
+}
+
+#map-stats .eps {
+	font: bold 30pt "Courier New", Courier, monospace;
+}
+
+#map-stats .tre {
+	font: 12pt "Courier New", Courier, monospace;
+}

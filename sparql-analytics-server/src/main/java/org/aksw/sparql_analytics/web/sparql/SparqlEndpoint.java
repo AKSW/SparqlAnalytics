@@ -1,12 +1,14 @@
-package org.aksw.sparql_analytics.web;
+package org.aksw.sparql_analytics.web.sparql;
 
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 
@@ -17,32 +19,69 @@ import org.aksw.jena_sparql_api.web.SparqlEndpointBase;
 import org.aksw.sparql_analytics.core.Backend;
 import org.aksw.sparql_analytics.core.QueryExecutionAnalytics;
 import org.aksw.sparql_analytics.core.ResultSetAnalyzing;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.Multimap;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 
 
-
+@Configuration
 @Path("/sparql")
 public class SparqlEndpoint
 	extends SparqlEndpointBase
+	implements ApplicationContextAware
 {
+	/*
+	 * Workaround for not getting injection working - Hopefully we get rid of that soon
+	 */
+	private ApplicationContext ctx = null;
 
-	private Backend backend;
-	private String defaultServiceUri;
+	@Override
+	public void setApplicationContext(ApplicationContext ctx)
+			throws BeansException {
+		this.ctx = ctx;
+		
+		this.backend = (Backend)ctx.getBean("sparqlAnalytics.backend");
+		this.defaultServiceUri = (String)ctx.getBean("sparqlAnalytics.defaultServiceUri");
+		this.allowOverrideServiceUri = (Boolean)ctx.getBean("sparqlAnalytics.allowOverrideDefaultServiceUri");
+	}
+
+	
+	//@Resource(name="sparqlAnalyticsBackend")
+	private Backend backend = null;
+	
+	//@Resource(name="sparqlAnalyticsDefaultServiceUri")
+	private String defaultServiceUri = null;
+	
+	//@Resource(name="sparqlAnalyticsAllowOverrideServiceUri")
 	private boolean allowOverrideServiceUri = false;
 	
-	public SparqlEndpoint(@Context ServletContext context) {
-		//super((QueryExecutionFactory)context.getAttribute("queryExecutionFactory"));
-	
-		this.backend = (Backend)context.getAttribute("backend");
-		if(backend == null) {
-			throw new NullPointerException("Backend was not set");
-		}
+	public SparqlEndpoint() {
 		
-		this.defaultServiceUri = (String)context.getAttribute("defaultServiceUri");
-		this.allowOverrideServiceUri = (Boolean)context.getAttribute("allowOverrideServiceUri");
+	}
+	
+//	public SparqlEndpoint(@Context ServletContext context) {
+//		//super((QueryExecutionFactory)context.getAttribute("queryExecutionFactory"));
+//	
+//		this.backend = (Backend)context.getAttribute("backend");
+//		if(backend == null) {
+//			throw new NullPointerException("Backend was not set");
+//		}
+//		
+//		this.defaultServiceUri = (String)context.getAttribute("defaultServiceUri");
+//		this.allowOverrideServiceUri = (Boolean)context.getAttribute("allowOverrideServiceUri");
+//	}
+	
+	public void setBackend(Backend backend) {
+		this.backend = backend;
+	}
+	
+	public Backend getBackend() {
+		return backend;
 	}
 
 	

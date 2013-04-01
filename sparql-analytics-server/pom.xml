@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>sparql-analytics-server</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>SPARQL Analytics - Server</name>
 	<url>http://github.com/AKSW/SparqlAnalytics</url>
@@ -19,6 +19,14 @@
 <!-- 		<finalName>sparql-analytics-core</finalName> -->
 <!-- 	</build> -->
 
+	<properties>
+		<sparql-analytics-server.context-path>/sparql-analytics</sparql-analytics-server.context-path>
+	
+		<nettosphere.version>1.4.2</nettosphere.version>
+		<ahc.version>1.7.6</ahc.version>
+		<jetty-plugin.version>8.1.10.v20130312</jetty-plugin.version>
+
+	</properties>
 
 	<dependencies>
 
@@ -28,11 +36,25 @@
 			<artifactId>sparql-analytics-core</artifactId>
 		</dependency>
 		
+		<!-- Jena SPARQL Api -->
 		<dependency>
 			<groupId>org.aksw.jena-sparql-api</groupId>
 			<artifactId>jena-sparql-api-server</artifactId>
 		</dependency>
 		
+		<!-- Atmosphere client library -->		
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-jquery</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+<!-- 	            <scope>provided</scope> -->
+        </dependency>			
+
+
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>util</artifactId>
@@ -43,6 +65,87 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 
+
+		<!-- Gson: Java to Json conversion -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		
+		
+		<!-- More deps where I don't know whether they are needed -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey-json.version}</version>
+		</dependency>
+		
+		<!-- Spring dependencies -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-core</artifactId> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-context</artifactId> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-web</artifactId> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-beans</artifactId> -->
+<!-- 		</dependency> -->
+
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+		</dependency>
+		
+		
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty-plugin.version}</version>
+				<configuration>
+					<systemProperties>
+						<systemProperty>
+							<name>jetty.port</name>
+							<value>5522</value>
+						</systemProperty>
+					</systemProperties>
+					<reload>manual</reload>
+						<webAppConfig>
+							<contextPath>${sparql-analytics-server.context-path}</contextPath>
+						</webAppConfig>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					<overlays>
+						<overlay>
+							<groupId>org.atmosphere</groupId>
+							<artifactId>atmosphere-jquery</artifactId>
+							<includes>
+								<include>jquery/jquery.atmosphere.js</include>
+							</includes>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+	</build>
 
 </project>

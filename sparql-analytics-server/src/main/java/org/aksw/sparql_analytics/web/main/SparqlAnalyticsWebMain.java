@@ -1,4 +1,4 @@
-package org.aksw.sparql_analytics.web;
+package org.aksw.sparql_analytics.web.main;
 
 import org.aksw.sparql_analytics.core.Backend;
 import org.apache.commons.cli.CommandLine;
@@ -61,6 +61,7 @@ public class SparqlAnalyticsWebMain {
 		
 		CommandLine commandLine = cliParser.parse(cliOptions, args);
 
+		String contextPath = "/sparql-analytics";
 		
 		// Parsing of command line args
 		String portStr = commandLine.getOptionValue("P", "5522");
@@ -111,7 +112,7 @@ public class SparqlAnalyticsWebMain {
 		Server server = new Server(port);
 
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-		context.setContextPath("/");
+		context.setContextPath(contextPath);
 		server.setHandler(context);
 
 		ServletHolder sh = new ServletHolder(org.atmosphere.cpr.AtmosphereServlet.class); //ServletContainer.class);

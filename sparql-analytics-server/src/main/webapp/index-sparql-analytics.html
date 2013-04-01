@@ -1,33 +1,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html class="js" lang="en" dir="ltr" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" dir="ltr" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     
 <head>    
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 	<title>SPARQL Analytics Demo</title>
       
 
-	<link rel="stylesheet" href="lib/twitter-bootstrap/2.0.3/css/bootstrap.min.css" /> 
-  	<link rel="stylesheet" href="lib/Font-Awesome/current/css/font-awesome.css" />
+	<link rel="stylesheet" href="js/lib/twitter-bootstrap/2.0.3/css/bootstrap.min.css" /> 
+  	<link rel="stylesheet" href="js/lib/Font-Awesome/current/css/font-awesome.css" />
     
-    <script type="text/javascript" src="lib/jquery/1.9.1/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="lib/underscore/1.3.1/underscore.js"></script>
+    <script type="text/javascript" src="js/lib/jquery/1.9.1/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="js/lib/underscore/1.3.1/underscore.js"></script>
 
 
-	<script src="lib/highcharts/2.2.5/js/highcharts.js"></script>
-	<script src="lib/highcharts/2.2.5/js/modules/exporting.js"></script>
+	<script src="js/lib/highcharts/2.2.5/js/highcharts.js"></script>
+	<script src="js/lib/highcharts/2.2.5/js/modules/exporting.js"></script>
 
 	
-	<script type="text/javascript" src="lib/canvg/current/rgbcolor.js"></script>
-	<script type="text/javascript" src="lib/canvg/current/canvg.js"></script> 
+	<script type="text/javascript" src="js/lib/canvg/current/rgbcolor.js"></script>
+	<script type="text/javascript" src="js/lib/canvg/current/canvg.js"></script> 
 
-    <script type="text/javascript" src="lib/namespacedotjs/a28da387ce/Namespace.js"></script>
+    <script type="text/javascript" src="js/lib/namespacedotjs/a28da387ce/Namespace.js"></script>
 
-	<script type="text/javascript" src="src/main/webapp/js/org/aksw/utils/MathUtils.js"></script>
-	<script type="text/javascript" src="src/main/webapp/js/org/aksw/utils/ChartUtils.js"></script>
-	<script type="text/javascript" src="src/main/webapp/js/org/aksw/sparql-analytics/app/Charts.js"></script>
+	<script type="text/javascript" src="js/org/aksw/utils/MathUtils.js"></script>
+	<script type="text/javascript" src="js/org/aksw/utils/ChartUtils.js"></script>
+	<script type="text/javascript" src="js/org/aksw/sparql-analytics/app/Charts.js"></script>
 		
 	
 	<script type="text/javascript">
+		var apiUrl = document.location.toString() + 'api/data/';
+	
 		var charts = Namespace("org.aksw.sparql-analytics.charts");
 
 
@@ -46,7 +48,7 @@
 		var updateChart = function() {
 			
 			var request = $.ajax({
-				url: 'api/min', // Assumes <host-name>/sparql-analytics/api/min
+				url: apiUrl + 'min', // Assumes <host-name>/sparql-analytics/api/min
 				//cache: false,
 				//url: "http://localhost/api/min",
 				type: 'get',

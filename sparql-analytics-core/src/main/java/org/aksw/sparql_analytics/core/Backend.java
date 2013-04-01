@@ -40,6 +40,10 @@ public class Backend {
 
 	}
 	
+	public void close() {
+		
+	}
+	
 	public void write(Map<String, Object> data) throws SQLException, FileNotFoundException {
 
 		Query query = (Query)data.get("query");
