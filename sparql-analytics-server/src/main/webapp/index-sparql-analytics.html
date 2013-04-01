@@ -28,7 +28,33 @@
 		
 	
 	<script type="text/javascript">
-		var apiUrl = document.location.toString() + 'api/data/';
+		var getBaseUrl = function() {
+			var base = document.location.toString();
+			
+			var i = base.lastIndexOf("/");
+			
+			// Remove a trailing slash and repeat 
+			if(i === base.length) {
+				i = base.substring(0, base.length - 1);
+				i = base.lastIndexOf("/");
+			}
+			
+			var l = base.length;
+			if(i > 0) {
+				// Take the part after the last slash, e.g. http://.../index.html
+				var test = base.substring(i, base.length);
+				var isFile = (test.indexOf(".") > 0);
+				
+				if(isFile) {
+					l = i;
+				}
+			}
+			
+			var result = base.substring(0, l);
+			return result;
+		}
+	
+		var apiUrl = getBaseUrl() + '/api/data/';
 	
 		var charts = Namespace("org.aksw.sparql-analytics.charts");
 
