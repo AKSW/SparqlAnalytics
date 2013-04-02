@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 
@@ -19,49 +17,45 @@ import org.aksw.jena_sparql_api.web.SparqlEndpointBase;
 import org.aksw.sparql_analytics.core.Backend;
 import org.aksw.sparql_analytics.core.QueryExecutionAnalytics;
 import org.aksw.sparql_analytics.core.ResultSetAnalyzing;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Multimap;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 
 
-@Configuration
+@Component
 @Path("/sparql")
 public class SparqlEndpoint
 	extends SparqlEndpointBase
-	implements ApplicationContextAware
 {
-	/*
-	 * Workaround for not getting injection working - Hopefully we get rid of that soon
-	 */
-	private ApplicationContext ctx = null;
-
-	@Override
-	public void setApplicationContext(ApplicationContext ctx)
-			throws BeansException {
-		this.ctx = ctx;
-		
-		this.backend = (Backend)ctx.getBean("sparqlAnalytics.backend");
-		this.defaultServiceUri = (String)ctx.getBean("sparqlAnalytics.defaultServiceUri");
-		this.allowOverrideServiceUri = (Boolean)ctx.getBean("sparqlAnalytics.allowOverrideDefaultServiceUri");
-	}
+//	/*
+//	 * Workaround for not getting injection working - Hopefully we get rid of that soon
+//	 */
+//	private ApplicationContext ctx = null;
+//
+//	@Override
+//	public void setApplicationContext(ApplicationContext ctx)
+//			throws BeansException {
+//		this.ctx = ctx;
+//		
+//		this.backend = (Backend)ctx.getBean("sparqlAnalytics.backend");
+//		this.defaultServiceUri = (String)ctx.getBean("sparqlAnalytics.defaultServiceUri");
+//		this.allowOverrideServiceUri = (Boolean)ctx.getBean("sparqlAnalytics.allowOverrideDefaultServiceUri");
+//	}
 
 	
-	//@Resource(name="sparqlAnalyticsBackend")
+	@Resource(name="sparqlAnalytics.backend")
 	private Backend backend = null;
 	
-	//@Resource(name="sparqlAnalyticsDefaultServiceUri")
+	@Resource(name="sparqlAnalytics.defaultServiceUri")
 	private String defaultServiceUri = null;
 	
-	//@Resource(name="sparqlAnalyticsAllowOverrideServiceUri")
-	private boolean allowOverrideServiceUri = false;
+	@Resource(name="sparqlAnalytics.allowOverrideDefaultServiceUri")
+	private Boolean allowOverrideServiceUri = false;
 	
 	public SparqlEndpoint() {
-		
+
 	}
 	
 //	public SparqlEndpoint(@Context ServletContext context) {

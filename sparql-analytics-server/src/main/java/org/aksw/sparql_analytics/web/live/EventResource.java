@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,8 +15,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.aksw.sparql_analytics.atmosphere.BoundsFilter;
+import org.aksw.sparql_analytics.atmosphere.CorsFilter;
 import org.aksw.sparql_analytics.atmosphere.EventListener;
-import org.aksw.sparql_analytics.model.Bounds;
 import org.aksw.sparql_analytics.model.Event;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.Broadcaster;
@@ -82,7 +81,10 @@ public class EventResource {
 	public void init() {
 		LOG.info("Initializing EventResource");
 		BroadcasterConfig config = getBroadcaster().getBroadcasterConfig();
+		
 		config.addFilter(new BoundsFilter());
+		//config.addFilter(new CorsFilter());
+		
 		listener = new EventListener();
 		generator = new EventGenerator();		
 	}
@@ -101,9 +103,11 @@ public class EventResource {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public SuspendResponse<String> connect(@Context AtmosphereResource resource,
-			@HeaderParam("X-Map-Bounds") Bounds bounds) {
-		if (bounds != null) resource.getRequest().setAttribute("bounds", bounds);
+	public SuspendResponse<String> connect(@Context AtmosphereResource resource) {
+			//@HeaderParam("X-Map-Bounds") Bounds bounds) {
+		
+		//if (bounds != null) resource.getRequest().setAttribute("bounds", bounds);
+		
 		return new SuspendResponse.SuspendResponseBuilder<String>()
 				.broadcaster(getBroadcaster())
 				.outputComments(true)

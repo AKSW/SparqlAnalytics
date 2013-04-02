@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import javax.ws.rs.GET;
@@ -22,42 +22,19 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
-@Configuration
+@Component
 @Path("/data")
 public class ApiData
-	implements ApplicationContextAware
 {
-	/*
-	 * Workaround for not getting injection working - Hopefully we get rid of that soon
-	 */
-	private ApplicationContext ctx = null;
-
-	@Override
-	public void setApplicationContext(ApplicationContext ctx)
-			throws BeansException {
-		this.ctx = ctx;
-		
-		this.dataSource = (DataSource)ctx.getBean("sparqlAnalytics.backend.dataSource");
-	}
-	
-	
+	@Resource(name="sparqlAnalytics.backend.dataSource")
 	private DataSource dataSource;
-
-//	public void setDataSource(DataSource dataSource) {
-//		this.dataSource = dataSource;
-//	}
-//	
-//	public DataSource getDataSource() {
-//		return dataSource;
-//	}
-
 	
 	
-	public ApiData() {//@Context ServletContext context) {
+	public ApiData() {//@Context ServletContext context) { // The component ONLY gets injected properly for NO-ARG CTORS!!! We could use @Init if we really needed to init after construction though.
 //		this.dataSource = (DataSource)context.getAttribute("dataSource");
 //		if(dataSource == null) {
 //			throw new NullPointerException("Data source was not set");

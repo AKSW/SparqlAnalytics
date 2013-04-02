@@ -1,16 +1,31 @@
-var apiUrl = document.location.toString() + 'api/live';
+//var apiUrl = "" + SparqlAnalytics.getDocumentLocationPath().concat(SparqlAnalytics.Path.create('../sparql-analytics/api/live'));
+var apiUrl = "http://localhost:5522/sparql-analytics/api/live"
+
+$.ajax({
+	type: 'GET',
+	url: "http://localhost:5522/sparql-analytics/api/data/min"
+}).done(function(data) {
+	console.log("Got: " + data);
+}).fail(function(data) {
+	console.log("Failed to access API: ", data);
+});
+
+
+	
+console.log("apiUrl is " + apiUrl);
 
 $(document).ready(function() {
 	// IE console compatibility
 	console = (!window.console) ? {} : window.console;
 	console.log = (!window.console.log) ? function() {} : window.console.log;
 
-	mapAgent.init('map-canvas', [40, -40], 2);
-	statsAgent.totalCallback = function(total) { $('.tre').text(total); };
-	statsAgent.epsCallback = function(eps) { $('.eps').text(eps); };
+	//mapAgent.init('map-canvas', [40, -40], 2);
+	//statsAgent.totalCallback = function(total) { $('.tre').text(total); };
+	//statsAgent.epsCallback = function(eps) { $('.eps').text(eps); };
 
 	initButtons();
 });
+
 
 function initButtons() {
 	$('body').on('click', '#btn-connection button', function() {
@@ -20,7 +35,9 @@ function initButtons() {
 			switch ($(this).attr('id')) {
 			case 'btn-connection-connect':
 				console.log("Connecting...");
-				webSocketAgent.connect();
+				webSocketAgent.connect(function(json) {
+					console.log("Got event: ", json);
+				});
 				break;
 			case 'btn-connection-disconnect':
 				console.log("Disconnecting...");
@@ -48,16 +65,99 @@ function initButtons() {
 	$('#btn-stats').button().click(function () {
 		if (!$(this).hasClass('active')) {
 			$(this).addClass('active');
-			$('#map-stats').show();
-			statsAgent.start();
+			//$('#map-stats').show();
+			//statsAgent.start();
 		} else {
 			$(this).removeClass('active');
-			$('#map-stats').hide();
-			statsAgent.stop();
+			//$('#map-stats').hide();
+			//statsAgent.stop();
 		}
 	});
 }
 
+var WebSocketAgent = function() {
+	this.socket = null;
+}
+
+WebSocketAgent.prototype = {
+		'connect': function(options) {
+			
+				var request = {
+						url: apiUrl,
+						logLevel : 'trace',
+						transport: 'websocket', /* websocket, jsonp, long-polling, polling, streaming */
+						fallbackTransport: 'streaming',
+						attachHeadersAsQueryString: true,
+						/*
+						headers: {
+							'X-Map-Bounds': {}//mapAgent.getBoundsHeader()
+						}
+						*/
+						/* CORS */
+						enableXDR: true,
+						readResponsesHeaders: false,
+						
+						/* Callbacks */
+						onOpen: function(response) {
+							console.log('Connected to realtime endpoint using ' + response.transport);
+						},
+						onReconnect: function(response) {
+							console.log('Reconnecting to realtime endpoint');
+						},
+						onClose: function(response) {
+							console.log('Disconnected from realtime endpoint');
+						},
+						onMessage: function(response) {
+							var data = response.responseBody;
+							if (data.length > 0) {
+								//	statsAgent.notify();
+								console.log('Message Received using ' + response.transport + ': ' + data);
+								var json = JSON.parse(data); // Shouldn't 'data' be in JSON format in the first place?
+						//		mapAgent.drawEvent(json);
+						
+								if(options && options.onMessage) {
+									options.onMessage(json);
+								}
+							
+							}
+						}
+				};
+				
+				this.socket = $.atmosphere.subscribe(request);
+		},
+		'disconnect': function() {
+			$.atmosphere.unsubscribe();
+			this.socket = null;
+		},
+//		'update': function(bounds) {
+//			if (!this.socket) return;
+//			this.socket.push(JSON.stringify(bounds));
+//		},
+		'trigger': function(data) {
+			if (!this.socket) {
+				console.log("No socket open - data not send: " + data);
+				return;
+			}
+			$.ajax({
+				type: 'POST',
+				url: apiUrl + '/event',
+				contentType: 'application/json',
+				data: JSON.stringify(data)
+			});
+		}
+};
+
+var webSocketAgent = new WebSocketAgent({
+	onMessage: function(data) {
+		console.log("Got data:", data);
+	}
+});
+
+
+
+
+
+/*
 var statsAgent = {
 		frequency: 1000,
 		totalEvent: 0,
@@ -87,7 +187,8 @@ var statsAgent = {
 			if (this.totalCallback) this.totalCallback(this.totalEvent);
 		}
 };
-
+*/
+/*
 var mapAgent = {
 		map: null,
 		'init': function(target, center, zoom) {
@@ -129,55 +230,4 @@ var mapAgent = {
 			}, 2000);
 		}
 };
-
-var webSocketAgent = {
-		socket: null,
-		'connect': function() {
-			var request = {
-					url: apiUrl,
-					logLevel : 'info',
-					transport: 'websocket', /* websocket, jsonp, long-polling, polling, streaming */
-					fallbackTransport: 'streaming',
-					attachHeadersAsQueryString: true,
-					headers: {'X-Map-Bounds': mapAgent.getBoundsHeader()}
-			};
-			request.onOpen = function(response) {
-				console.log('Connected to realtime endpoint using ' + response.transport);
-			};
-			request.onReconnect = function(response) {
-				console.log('Reconnecting to realtime endpoint');
-			};
-			request.onClose = function(response) {
-				console.log('Disconnected from realtime endpoint');
-			};
-			request.onMessage = function (response) {
-				var data = response.responseBody;
-				if (data.length > 0) {
-					statsAgent.notify();
-					console.log('Message Received using ' + response.transport + ': ' + data);
-					var json = JSON.parse(data);
-					mapAgent.drawEvent(json);
-				}
-			};
-			this.socket = $.atmosphere.subscribe(request);
-		},
-		'disconnect': function() {
-			$.atmosphere.unsubscribe();
-			this.socket = null;
-		},
-		'update': function(bounds) {
-			if (!this.socket) return;
-			this.socket.push(JSON.stringify(bounds));
-		},
-		'trigger': function(latlng) {
-			if (!this.socket) return;
-			var data = {'lat': latlng.lat, 'lng': latlng.lng};
-			$.ajax({
-				type: 'POST',
-				url: apiUrl + '/event',
-				contentType: 'application/json',
-				data: JSON.stringify(data)
-			});
-		}
-};
-
+*/

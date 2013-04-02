@@ -5,51 +5,63 @@
 	<!-- <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" -->
 	<!-- xmlns:j2ee="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" -->
 	<!-- xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2.5.xsd"> -->
-	
-	
-<!-- 	<context-param> -->
-<!-- 		<param-name>contextConfigLocation</param-name> -->
-<!-- 		<param-value>/WEB-INF/applicationContext.xml</param-value> -->
-<!-- 	</context-param> -->
+
+
+	<!-- <context-param> -->
+	<!-- <param-name>contextConfigLocation</param-name> -->
+	<!-- <param-value>/WEB-INF/applicationContext.xml</param-value> -->
+	<!-- </context-param> -->
 
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		<listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
 	</listener>
 
-<!-- 	<listener> -->
-<!-- 		<listener-class>org.springframework.integration.asynchttp.context.AsyncHttpContextLoaderListener</listener-class> -->
-<!-- 	</listener> -->
+	<!-- <listener> -->
+	<!-- <listener-class>org.springframework.integration.asynchttp.context.AsyncHttpContextLoaderListener</listener-class> -->
+	<!-- </listener> -->
 
 
 
 	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+		<listener-class>org.springframework.web.context.request.RequestContextListener
+		</listener-class>
 	</listener>
-	
-	
-	
+
+
+
 	<display-name>SparqlAnalytics</display-name>
 	<description>Real-Time SPARQL Analytics</description>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
+	<filter>
+		<filter-name>CORS Filter</filter-name>
+		<filter-class>org.aksw.sparql_analytics.atmosphere.CorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CORS Filter</filter-name>
+		<servlet-name>AtmosphereServlet</servlet-name>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>AtmosphereServlet</servlet-name>
 		<description>AtmosphereServlet</description>
-<!-- 		<servlet-class>org.atmosphere.cpr.MeteorServlet</servlet-class> -->
+		<!-- <servlet-class>org.atmosphere.cpr.MeteorServlet</servlet-class> -->
 
 		<servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
 
 		<init-param>
-            <param-name>org.atmosphere.servlet</param-name>
-            <param-value>org.springframework.web.servlet.DispatcherServlet</param-value>
-        </init-param>
+			<param-name>org.atmosphere.servlet</param-name>
+			<param-value>org.springframework.web.servlet.DispatcherServlet
+			</param-value>
+		</init-param>
 
 		<init-param>
-            <param-name>contextClass</param-name>
-            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-        </init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+			</param-value>
+		</init-param>
 
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -65,39 +77,39 @@
 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
 			<param-value>true</param-value>
 		</init-param>
-        
+
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AtmosphereServlet</servlet-name>
-<!-- 			<url-pattern>/api/live/*</url-pattern> -->
-<!-- 		<url-pattern>/*</url-pattern> -->
+		<!-- <url-pattern>/api/live/*</url-pattern> -->
+		<!-- <url-pattern>/*</url-pattern> -->
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 
 
-<!-- 	<servlet> -->
-<!-- 		<description>AtmosphereServlet</description> -->
-<!-- 		<servlet-name>AtmosphereServlet</servlet-name> -->
-<!-- 		<servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class> -->
-<!-- 		<init-param> -->
-<!-- 			<param-name>com.sun.jersey.config.property.packages</param-name> -->
-<!-- 			<param-value>org.aksw.sparql_analytics</param-value> -->
-<!-- 		</init-param> -->
-<!-- 		<init-param> -->
-<!-- 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name> -->
-<!-- 			<param-value>true</param-value> -->
-<!-- 		</init-param> -->
-<!-- 		<load-on-startup>0</load-on-startup> -->
-<!-- 	</servlet> -->
-<!-- 	<servlet-mapping> -->
-<!-- 		<servlet-name>AtmosphereServlet</servlet-name> -->
-<!-- 		<url-pattern>/api/live/*</url-pattern> -->
-<!-- 	</servlet-mapping> -->
+	<!-- <servlet> -->
+	<!-- <description>AtmosphereServlet</description> -->
+	<!-- <servlet-name>AtmosphereServlet</servlet-name> -->
+	<!-- <servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class> -->
+	<!-- <init-param> -->
+	<!-- <param-name>com.sun.jersey.config.property.packages</param-name> -->
+	<!-- <param-value>org.aksw.sparql_analytics</param-value> -->
+	<!-- </init-param> -->
+	<!-- <init-param> -->
+	<!-- <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name> -->
+	<!-- <param-value>true</param-value> -->
+	<!-- </init-param> -->
+	<!-- <load-on-startup>0</load-on-startup> -->
+	<!-- </servlet> -->
+	<!-- <servlet-mapping> -->
+	<!-- <servlet-name>AtmosphereServlet</servlet-name> -->
+	<!-- <url-pattern>/api/live/*</url-pattern> -->
+	<!-- </servlet-mapping> -->
 
 
-<!--     <session-config> -->
-<!--         <session-timeout>90</session-timeout> -->
-<!--     </session-config> -->
+	<!-- <session-config> -->
+	<!-- <session-timeout>90</session-timeout> -->
+	<!-- </session-config> -->
 
 </web-app>
