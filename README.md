@@ -77,11 +77,11 @@ You can embad the chart widget by only integrating the following snippet (with p
     <body>
         <div id="histogram"></div>
 
-        <script src="js/lib/jquery/1.9.1/jquery-1.9.1.js"></script>
-        <script src="js/lib/jquery-atmosphere/jquery.atmosphere.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/lib/underscore/1.4.4/underscore.js"></script>
-        <script src="js/lib/highcharts/2.2.5/js/highcharts.js"></script>
+        <script type="text/javascript" src="js/lib/jquery/1.9.1/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="js/lib/jquery-atmosphere/jquery.atmosphere.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/lib/underscore/1.4.4/underscore.js"></script>
+        <script type="text/javascript" src="js/lib/highcharts/2.2.5/js/highcharts.js"></script>
         <script type="text/javascript" src="js/lib/namespacedotjs/a28da387ce/Namespace.js"></script>
 
         <script type="text/javascript" src="js/sparql-analytics-client.min.js"></script>
@@ -90,7 +90,7 @@ You can embad the chart widget by only integrating the following snippet (with p
             $(document).ready(function() {			
                 new SparqlAnalytics.WidgetChartQueryLoad({
                     el: '#histogram',
-                    apiUrl: "http://localhost:5522/sparql-analytics/api/live"
+                    apiUrl: 'http://localhost:5522/sparql-analytics/api/live'
                 });
             });
         </script>
