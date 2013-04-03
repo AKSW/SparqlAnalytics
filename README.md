@@ -15,12 +15,11 @@ A demo can be seen here:
 #### Server Setup
 A note in advance: currently the server is [CORS](http://enable-cors.org) enabled on all paths, so you *and anyone else* should be able to do cross site requests from JavaScript.
 
-* Clone the project and run
+Clone the project and run
 
     maven clean install
 
-* First, you need a postgres database. All query activity will be written to it.
-
+First, you need a postgres database. All query activity will be written to it.
 
     sudo apt-get install postgres
     # ... further configuration is up to you
@@ -31,15 +30,14 @@ A note in advance: currently the server is [CORS](http://enable-cors.org) enable
     # Load the core schema
     psql -d sparql_analytics -f sparql-analytics-core/schema.sql
 
-
-* An example server configuration is located under `sparql-analytics-server/config/example/sparql-analytics/platform.properties`. Either modify it directly, or better: create a copy of it and edit the copy:
+An example server configuration is located under `sparql-analytics-server/config/example/sparql-analytics/platform.properties`. Either modify it directly, or better: create a copy of it and edit the copy:
   
     mkdir sparql-analytics-server/config/myconf
     cp -rf sparql-analytics-server/config/example/* sparql-analytics-server/config/myconf
 
 Note that the `sparqlify-analytics` directory under your config directory (i.e. `example` or `myconf`) corresponds to the context path under which the server will run. So this is not optional!
 
-* Under `bin` you find the script to run the server:
+Under `bin` you find the script to run the server:
 
     cd bin
     ./run-platform sparql-analytics-server/config/myconf
@@ -52,7 +50,7 @@ By default, the server will start on port 5522. Try your browser or curl to test
 
 #### Client Setup
 
-* The client chart widget is in the `sparql-analytics-client` module. To build the minimized .js file, run
+The client chart widget is in the `sparql-analytics-client` module. To build the minimized .js file, run
 
     cd sparql-analytics-client
     mvn package
@@ -63,7 +61,7 @@ By default, the server will start on port 5522. Try your browser or curl to test
     ln -s target/sparql-analytics-client-{version}/webapp/js/sparql-analytics-client.min.js src/main/webapp/js/sparql-analytics-client.min.js
 
 
-* Link the client HTML/JavaScript code to your webserver directory (requires you to allow your webserver to follow symlinks)
+Link the client HTML/JavaScript code to your webserver directory (requires you to allow your webserver to follow symlinks)
 
     ln -s /path/to/repo/sparql-analytics-client/src/main/webapp /var/www/sparql-analytics-client
 
@@ -71,7 +69,7 @@ Now visit the following file [index-sparql-analytics-minimal.html](https://githu
 
 [http://localhost/sparql-analytics-client/index-sparql-analytics-minimal.html](http://localhost/sparql-analytics-client/index-sparql-analytics-minimal.html)
 
-* You can embad the chart widget by only integrating the following snippet (with properly adjusted paths) into your web page:
+You can embad the chart widget by only integrating the following snippet (with properly adjusted paths) into your web page:
 
     <html>
     <body>
