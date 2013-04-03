@@ -1,7 +1,7 @@
 //var apiUrl = "" + SparqlAnalytics.getDocumentLocationPath().concat(SparqlAnalytics.Path.create('../sparql-analytics/api/live'));
 var apiUrl = "http://localhost:5522/sparql-analytics/api/live"
 
-
+/*
 $.ajax({
 	type: 'GET',
 	url: "http://localhost:5522/sparql-analytics/api/data/min",
@@ -11,133 +11,16 @@ $.ajax({
 }).fail(function(data) {
 	console.log("Failed to access API: ", data);
 });
-
-
-var charts = Namespace("org.aksw.sparql-analytics.charts");
-var chartDiv = $('#histogram');
-var elChartDiv = chartDiv.get(0);
-
-
-Highcharts.setOptions({
-    global: {
-        useUTC: false
-    }
-});
-
-var chartSpec = charts.createHistogramChartSpec({
-	name: "Recent Query Load"
-});
-
-/*
-var ChartModel = Backbone.Model({
-	beginTimestamp:
-	slotWith:
-	
-})
 */
-var timeWindow = 60 * 1000; //
-
-var getValueForX = function(chart, x) {
-	var points = chart.series[0].points;
-	for(var i = 0; i < points.length; i++){
-		var point = points[i];
-	   
-		if(points.x = x) {
-		   return point.y;
-	   }
-	}
-}
 
 
-var updateChart = function(chart, json) {
-	
-}
 
-/*
-_.extend(chartSpec, {
-	plotOptions: {
-		area: { animation: false },
-		line: { animation: false }
-	}
-});*/
-
-chartSpec.chart.renderTo = elChartDiv;
-var activeChart = new Highcharts.Chart(chartSpec);
-
-
-	
-console.log("apiUrl is " + apiUrl);
-
-$(document).ready(function() {
-	// IE console compatibility
-	console = (!window.console) ? {} : window.console;
-	console.log = (!window.console.log) ? function() {} : window.console.log;
-
-	//mapAgent.init('map-canvas', [40, -40], 2);
-	//statsAgent.totalCallback = function(total) { $('.tre').text(total); };
-	//statsAgent.epsCallback = function(eps) { $('.eps').text(eps); };
-
-	initButtons();
-});
-
-
-function initButtons() {
-	$('body').on('click', '#btn-connection button', function() {
-		if(!$(this).hasClass('active')) {
-			$('#btn-connection button').removeClass('active');
-			$(this).addClass('active');
-			switch ($(this).attr('id')) {
-			case 'btn-connection-connect':
-				console.log("Connecting...");
-				webSocketAgent.connect();
-				/*
-				function(json) {
-					console.log("Got event: ", json);
-				});
-				*/
-				break;
-			case 'btn-connection-disconnect':
-				console.log("Disconnecting...");
-				webSocketAgent.disconnect();
-				break;
-			}
-		}
-	});
-
-	$('body').on('click', '#btn-generation button', function() {
-		if(!$(this).hasClass('active')) {
-			$('#btn-generation button').removeClass('active');
-			$(this).addClass('active');
-			switch ($(this).attr('id')) {
-			case 'btn-generation-start':
-				$.ajax({type: 'GET', url: apiUrl + '/start'});
-				break;
-			case 'btn-generation-stop':
-				$.ajax({type: 'GET', url: apiUrl + '/stop'});
-				break;
-			}
-		}
-	});
-
-	$('#btn-stats').button().click(function () {
-		if (!$(this).hasClass('active')) {
-			$(this).addClass('active');
-			//$('#map-stats').show();
-			//statsAgent.start();
-		} else {
-			$(this).removeClass('active');
-			//$('#map-stats').hide();
-			//statsAgent.stop();
-		}
-	});
-}
-
-var WebSocketAgent = function(handler) {
+ns.WebSocketAgent = function(handler) {
 	this.socket = null;
 	this.handler = handler;
 }
 
-WebSocketAgent.prototype = {
+ns.WebSocketAgent.prototype = {
 		'connect': function() {
 				var self = this;
 			
@@ -207,11 +90,11 @@ WebSocketAgent.prototype = {
 		}
 };
 
-var SeriesApi = function(series) {
+ns.SeriesApi = function(series) {
 	this.series = series; 
 };
 
-SeriesApi.prototype = {
+ns.SeriesApi.prototype = {
 	getIndexForX: function(x) {
 		var result = null;
 		var points = this.series.points;
@@ -312,7 +195,7 @@ SeriesApi.prototype = {
 
 
 
-var ChartController = function(chart) {
+ns.ChartController = function(chart) {
 	this.chart = chart;
 	this.series = new SeriesApi(this.chart.series[0]);
 	
@@ -321,29 +204,12 @@ var ChartController = function(chart) {
 	var self = this;
 	
 	// Generate update events on the client side in case the server is idle
-	this.clientUpdate = setTimeout(function() {
-	
-		
-		
-		
-	}, 60000);
+	// TODO: Factor this component out
+	this.clientUpdate = null;
 }
 
 
-/*
-var Poller = function(now, start, window) {
-	this.deferred = $.Deferred();
-	
-}
-
-Poller.prototype = {
-		init: function() {
-			
-		}
-}
-*/
-
-ChartController.prototype = {
+ns.ChartController.prototype = {
 		/**
 		 * Required attributes:
 		 * 
@@ -375,7 +241,7 @@ ChartController.prototype = {
 			var t = start + delta * window; // Start time of the first client slot
 			for(var i = 0; i < clientN; ++i) {
 				
-				console.log("Init Date: " + new Date(t));
+				//console.log("Init Date: " + new Date(t));
 				
 				data[i] = [t, 0];
 				t += window;
@@ -485,7 +351,7 @@ var chartController = new ChartController(activeChart);
 
 var messageHandler = {
 	onMessage: function(data) {
-		console.log("Got data:", data);
+		//console.log("Got data:", data);
 		
 		if(data.reset) {
 			chartController.reset(data.reset);
@@ -501,8 +367,9 @@ var messageHandler = {
 
 var webSocketAgent = new WebSocketAgent(messageHandler);
 
+webSocketAgent.connect();
 
-
+$.ajax({type: 'GET', url: apiUrl + '/start'});
 
 
 /*

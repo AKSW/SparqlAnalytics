@@ -75,6 +75,7 @@
             },
             */
             yAxis: {
+            	allowDecimals: false,
                 title: {
                     text: 'Number of queries'
                 }
@@ -101,12 +102,14 @@
             credits: {
                 enabled: false
             },
+            /*
             exporting: {
             	enabled: false
             },
+            */
             series: [{
-            	name: (data && data.name) ? data.name : 'name not set',
-            	showInLegend: true,
+            	name: 'Query load', //(data && data.name) ? data.name : 'name not set',
+            	showInLegend: false,
                 data: (data && data.data) ? data.data : [],
                 color: '#4572A7'
             }]
@@ -142,9 +145,9 @@
 
             },
             yAxis: {
-                min: 0,
-                max: 1,
-                tickInterval: 0.1,
+                min: 100,
+                //max: 1,
+                tickInterval: 10,
                 title: {
                 	//enabled: false,
                     text: '',

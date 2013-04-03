@@ -1,4 +1,4 @@
-var SparqlAnalytics = {};
+var SparqlAnalytics;
 
 (function(ns) {
 	

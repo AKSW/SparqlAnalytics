@@ -14,7 +14,7 @@ public class UsageCounterIncremental {
 	private final ApiBean apiBean;
 
 	private Long lastSentEvent; // TODO Add time unit
-	private int slotCount = 20;
+	private int slotCount = 120;
 
 	public UsageCounterIncremental(ApiBean api) {
 		this.apiBean = api;
