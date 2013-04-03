@@ -2,7 +2,6 @@ package org.aksw.sparql_analytics.web.live;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -14,20 +13,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.aksw.sparql_analytics.atmosphere.BoundsFilter;
-import org.aksw.sparql_analytics.atmosphere.CorsFilter;
 import org.aksw.sparql_analytics.atmosphere.EventListener;
+import org.aksw.sparql_analytics.core.ApiBean;
 import org.aksw.sparql_analytics.model.Event;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.Broadcaster;
-import org.atmosphere.cpr.BroadcasterConfig;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.cpr.DefaultBroadcaster;
 import org.atmosphere.jersey.SuspendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.jersey.spi.resource.Singleton;
+import org.springframework.stereotype.Component;
 
 /**
  * <pre>
@@ -44,23 +40,25 @@ import com.sun.jersey.spi.resource.Singleton;
  * @author Nicolas
  */
 
+@Component
 @Path("/live/")
-@Singleton
-public class EventResource {
+//@Singleton
+public class EventResource
+{
 
-	private final Logger LOG = LoggerFactory.getLogger(EventResource.class);
+	private final Logger logger = LoggerFactory.getLogger(EventResource.class);
 
 	private EventListener listener;
 	private EventGenerator generator;
 
-	@Resource(name="sparqlAnalyticsDs")
-	private DataSource dataSource;
-	
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	@Resource(name="sparqlAnalytics.api")
+	private ApiBean apiBean;
+
+	@Resource(name="sparqlAnalytics.queryNotifier")
+	private Object queryNotifier;
 	
 	@Context
+	//@Resource(name="broadcasterFactory", )
 	private BroadcasterFactory broadcasterFactory;
 
 	/**
@@ -79,10 +77,10 @@ public class EventResource {
 	 */
 	@PostConstruct
 	public void init() {
-		LOG.info("Initializing EventResource");
-		BroadcasterConfig config = getBroadcaster().getBroadcasterConfig();
+		//LOG.info("Initializing EventResource");
+		//BroadcasterConfig config = getBroadcaster().getBroadcasterConfig();
 		
-		config.addFilter(new BoundsFilter());
+		//config.addFilter(new BoundsFilter());
 		//config.addFilter(new CorsFilter());
 		
 		listener = new EventListener();
@@ -130,7 +128,7 @@ public class EventResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response broadcastEvent(@QueryParam("async") @DefaultValue("true") boolean async,
 			Event event) throws Exception {
-		LOG.info("New event received: {}", event);
+		logger.info("New event received: {}", event);
 		if (async) {
 			getBroadcaster().broadcast(event);
 			return Response.ok(0).build();
@@ -144,15 +142,15 @@ public class EventResource {
 	@GET
 	@Path("start")
 	public Response start() {
-		LOG.info("Starting EventGenerator");
-		generator.start(getBroadcaster(), 100);
+		logger.info("Starting EventGenerator");
+		generator.start(getBroadcaster(), apiBean, queryNotifier);
 		return Response.ok().build();
 	}
 
 	@GET
 	@Path("stop")
 	public Response stop() {
-		LOG.info("Stopping EventGenerator");
+		logger.info("Stopping EventGenerator");
 		generator.stop();
 		return Response.ok().build();
 	}

@@ -17,7 +17,7 @@
 	:::: Packages for which to process Spring annotations
 	 -->
 	<context:component-scan base-package="org.aksw.sparql_analytics.web" />
-	<context:component-scan base-package="org.aksw.sparql_analytics.web.data" />
+<!-- 	<context:component-scan base-package="org.aksw.sparql_analytics.web.data" /> -->
 
 
 	<!-- 
@@ -54,6 +54,12 @@
 		<constructor-arg index="0" type="javax.sql.DataSource" ref="sparqlAnalytics.backend.dataSource" />
 	</bean>
 
+	<bean id="sparqlAnalytics.api" scope="singleton"
+		class="org.aksw.sparql_analytics.core.ApiBean">
+		<constructor-arg index="0" type="javax.sql.DataSource" ref="sparqlAnalytics.backend.dataSource" />
+	</bean>
+
+
 	<bean id="sparqlAnalytics.defaultServiceUri" class="java.lang.String">
 		<constructor-arg value="${sparqlAnalytics.defaultServiceUri}"/>
 	</bean>
@@ -62,4 +68,8 @@
 		<constructor-arg value="${sparqlAnalytics.allowOverrideDefaultServiceUri}"/>
 	</bean>
 
+	<!-- A bean which gets notified on queries -->
+	<bean id="sparqlAnalytics.queryNotifier" class="java.lang.Object" />
+
+	<bean id="broadcasterFactory" class="org.atmosphere.cpr.DefaultBroadcasterFactory" factory-method="getDefault" lazy-init="true"/> 
 </beans>

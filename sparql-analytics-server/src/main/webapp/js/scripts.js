@@ -1,9 +1,11 @@
 //var apiUrl = "" + SparqlAnalytics.getDocumentLocationPath().concat(SparqlAnalytics.Path.create('../sparql-analytics/api/live'));
 var apiUrl = "http://localhost:5522/sparql-analytics/api/live"
 
+
 $.ajax({
 	type: 'GET',
-	url: "http://localhost:5522/sparql-analytics/api/data/min"
+	url: "http://localhost:5522/sparql-analytics/api/data/min",
+	crossDomain: true
 }).done(function(data) {
 	console.log("Got: " + data);
 }).fail(function(data) {

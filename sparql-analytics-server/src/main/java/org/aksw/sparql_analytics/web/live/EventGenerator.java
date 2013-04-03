@@ -1,12 +1,20 @@
 package org.aksw.sparql_analytics.web.live;
 
-import java.util.Random;
+import java.util.List;
 
-import org.aksw.sparql_analytics.model.Event;
+import org.aksw.sparql_analytics.core.ApiBean;
+import org.aksw.sparql_analytics.core.RequestCount;
 import org.atmosphere.cpr.Broadcaster;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
 
 public class EventGenerator {
 
+	private static final Logger logger = LoggerFactory.getLogger(EventGenerator.class);
+	
 	private static final String GENERATOR_THREAD_NAME = "GeneratorThread";
 
 	private volatile Thread generatorThread;
@@ -16,9 +24,9 @@ public class EventGenerator {
 	 * the provided Broadcaster. This method does nothing if a Generator is
 	 * already running.
 	 */
-	public synchronized void start(Broadcaster broadcaster, int interval) {
+	public synchronized void start(Broadcaster broadcaster, ApiBean apiBean, Object queryNotifier) {
 		if (generatorThread == null) {
-			Generator generator = new Generator(broadcaster, interval);
+			Generator generator = new Generator(broadcaster, apiBean, queryNotifier);
 			generatorThread = new Thread(generator, GENERATOR_THREAD_NAME);
 			generatorThread.start();
 		}
@@ -35,28 +43,76 @@ public class EventGenerator {
 			tmpReference.interrupt();
 		}
 	}
+	
+	/**
+	 * Notify the thread that an event has happened and it may have to send new data
+	 * 
+	 */
+	public synchronized void ping() {
+		generatorThread.notifyAll();
+	}
+	
 
 	private class Generator implements Runnable {
 
-		private final Random random;
 		private final Broadcaster broadcaster;
-		private final int interval;
+		private final ApiBean apiBean;
+		private final Object queryNotifier;
+		
+		//private final int interval;
+		
+		private DateTime lastSentEvent; // TODO Add time unit
+		private int slotCount = 20;
+		
+		
+		//Timestamp 
+		
 
-		public Generator(Broadcaster broadcaster, int interval) {
-			this.random = new Random();
+		public Generator(Broadcaster broadcaster, ApiBean apiBean, Object queryNotifier) {
 			this.broadcaster = broadcaster;
-			this.interval = interval;
+			this.apiBean = apiBean;
+			this.queryNotifier = queryNotifier;
+			
+			//this.interval = interval;
 		}
 
 		@Override
 		public void run() {
+			logger.info("Starting Event Generator Thread");
 			Thread currentThread = Thread.currentThread();
 			while (currentThread == generatorThread) {
+				
 				try {
-					double lat = random.nextInt((int) 180E6) / 10E6 - 90;
-					double lng = random.nextInt((int) 360E6) / 10E6 - 180;
-					broadcaster.broadcast(new Event(lat, lng));
-					Thread.sleep(interval);
+					logger.info("Broadcaster thread going to wait for events");
+					
+					synchronized(queryNotifier) {
+						queryNotifier.wait();
+					}
+					logger.info("Broadcaster thread woke up");
+					
+					// Once we were notified, we wait for another second before we actually begin our work
+					Thread.sleep(1000);
+					
+					DateTime dt = new DateTime();
+					//int minuteOfDay = dt.minuteOfDay().get();
+					
+					if(lastSentEvent == null) {
+						lastSentEvent = dt.minus(slotCount);
+					}
+
+					List<RequestCount> data;
+					try {
+						data = apiBean.createSummaryHistogram(lastSentEvent.getMillis());
+					} catch (Exception e) {
+						logger.error("Failed to retrieve data from backend", e);
+						continue;
+					}
+					
+					Gson gson = new Gson();
+					String json = gson.toJson(data);
+					
+					broadcaster.broadcast(json);
+					//Thread.sleep(interval);
 				} catch (InterruptedException e) {
 					break;
 				}

@@ -17,6 +17,11 @@ import org.aksw.jena_sparql_api.web.SparqlEndpointBase;
 import org.aksw.sparql_analytics.core.Backend;
 import org.aksw.sparql_analytics.core.QueryExecutionAnalytics;
 import org.aksw.sparql_analytics.core.ResultSetAnalyzing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Multimap;
@@ -29,21 +34,8 @@ import com.hp.hpl.jena.query.QueryExecution;
 public class SparqlEndpoint
 	extends SparqlEndpointBase
 {
-//	/*
-//	 * Workaround for not getting injection working - Hopefully we get rid of that soon
-//	 */
-//	private ApplicationContext ctx = null;
-//
-//	@Override
-//	public void setApplicationContext(ApplicationContext ctx)
-//			throws BeansException {
-//		this.ctx = ctx;
-//		
-//		this.backend = (Backend)ctx.getBean("sparqlAnalytics.backend");
-//		this.defaultServiceUri = (String)ctx.getBean("sparqlAnalytics.defaultServiceUri");
-//		this.allowOverrideServiceUri = (Boolean)ctx.getBean("sparqlAnalytics.allowOverrideDefaultServiceUri");
-//	}
-
+	private static final Logger logger = LoggerFactory.getLogger(SparqlEndpoint.class);
+	
 	
 	@Resource(name="sparqlAnalytics.backend")
 	private Backend backend = null;
@@ -54,46 +46,13 @@ public class SparqlEndpoint
 	@Resource(name="sparqlAnalytics.allowOverrideDefaultServiceUri")
 	private Boolean allowOverrideServiceUri = false;
 	
+	@Resource(name="sparqlAnalytics.queryNotifier")
+	private Object queryNotifier;
+	
+
 	public SparqlEndpoint() {
-
 	}
 	
-//	public SparqlEndpoint(@Context ServletContext context) {
-//		//super((QueryExecutionFactory)context.getAttribute("queryExecutionFactory"));
-//	
-//		this.backend = (Backend)context.getAttribute("backend");
-//		if(backend == null) {
-//			throw new NullPointerException("Backend was not set");
-//		}
-//		
-//		this.defaultServiceUri = (String)context.getAttribute("defaultServiceUri");
-//		this.allowOverrideServiceUri = (Boolean)context.getAttribute("allowOverrideServiceUri");
-//	}
-	
-	public void setBackend(Backend backend) {
-		this.backend = backend;
-	}
-	
-	public Backend getBackend() {
-		return backend;
-	}
-
-	
-	
-	/*
-	public static Multimap<String, String> parseQueryString(String url) {
-        try {
-            Multimap<String, String> ret = ArrayListMultimap.create();
-            URLEncodedUtils.
-            for (NameValuePair param : URLEncodedUtils.parse(new URI(url), "UTF-8")) {
-                ret.put(param.getName(), param.getValue());
-            }
-            return ret;
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    */
 	
 	public void onQueryExecutionDone(Map<String, Object> data)
 	{
@@ -103,11 +62,13 @@ public class SparqlEndpoint
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
+		
 	
 	@Override
 	public QueryExecution createQueryExecution(final Query query, @Context HttpServletRequest req) {
+		
+		logger.info("ServiceUri: " + defaultServiceUri);
+		logger.info("Allow Override: " + allowOverrideServiceUri);
 		
 		
 		Multimap<String, String> qs = UriUtils.parseQueryString(req.getQueryString());
@@ -149,8 +110,15 @@ public class SparqlEndpoint
 		
 		QueryExecution qe = qef.createQueryExecution(query);
 		
+		
+		//QueryExecutionEvent qee = new QueryExecutionEvent(qe);
+		//qee.addListener(listener);
+		
+		
+		
 		final QueryExecutionAnalytics result = new QueryExecutionAnalytics(qe);
 
+		
 		result.setOnCloseHandler(new Runnable() {
 
 			@Override
@@ -164,6 +132,11 @@ public class SparqlEndpoint
 				onQueryExecutionDone(data);				
 			}
 		});
+
+		synchronized(queryNotifier) {
+			queryNotifier.notifyAll();
+		}
+
 		
 		return result;
 	}

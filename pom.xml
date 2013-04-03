@@ -37,7 +37,8 @@
 		<jersey-json.version>1.12</jersey-json.version>
 <!-- 		<jersey-json.version>1.17.1</jersey-json.version> -->
     	<javaee-api.version>6.0</javaee-api.version>
-			
+
+		<joda-time.version>2.2</joda-time.version>			
 
 
 		<slf4j.version>1.6.0</slf4j.version>
@@ -225,6 +226,13 @@
 				<scope>compile</scope>
 			</dependency>
 
+
+			<!-- Time Library -->
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>${joda-time.version}</version>
+			</dependency>
 
 			<!-- Gson: Java to Json conversion -->
 			<dependency>
