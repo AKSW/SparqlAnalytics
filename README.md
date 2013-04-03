@@ -21,6 +21,7 @@ A note in advance: currently the server is [CORS](http://enable-cors.org) enable
 
 * First, you need a postgres database. All query activity will be written to it.
 
+
     sudo apt-get install postgres
     # ... further configuration is up to you
     
