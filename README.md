@@ -23,10 +23,10 @@ A note in advance: currently the server is [CORS](http://enable-cors.org) enable
 
     sudo apt-get install postgres
     # ... further configuration is up to you
-
+    
     # Create a DB called 'sparql_analytics'
     createdb sparql_analytics
-
+    
     # Load the core schema
     psql -d sparql_analytics -f sparql-analytics-core/schema.sql
 
@@ -55,10 +55,10 @@ By default, the server will start on port 5522. Try your browser or curl to test
 
     cd sparql-analytics-client
     mvn package
-
+    
     # Link the built js file to the webapp js directory, because our HTML file in the next step references it
     # CARE: Note the {version} placeholder in the next line :)
-
+    
     ln -s target/sparql-analytics-client-{version}/webapp/js/sparql-analytics-client.min.js src/main/webapp/js/sparql-analytics-client.min.js
 
 
@@ -66,9 +66,9 @@ By default, the server will start on port 5522. Try your browser or curl to test
 
     ln -s /path/to/repo/sparql-analytics-client/src/main/webapp /var/www/sparql-analytics-client
 
-Now visit the following file [index-sparql-analytics-minimal.html](http://github/todo) for a minimal example:
+Now visit the following file [index-sparql-analytics-minimal.html](https://github.com/AKSW/SparqlAnalytics/blob/master/sparql-analytics-client/src/main/webapp/index-sparql-analytics-minimal.html) for a minimal example: 
 
-    [http://localhost/sparql-analytics-client/index-sparql-analytics-minimal.html](http://localhost/sparql-analytics-client/index-sparql-analytics-minimal.html)
+[http://localhost/sparql-analytics-client/index-sparql-analytics-minimal.html](http://localhost/sparql-analytics-client/index-sparql-analytics-minimal.html)
 
 * You can embad the chart widget by only integrating the following snippet (with properly adjusted paths) into your web page:
 
