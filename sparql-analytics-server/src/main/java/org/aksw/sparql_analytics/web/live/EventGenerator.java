@@ -1,11 +1,13 @@
 package org.aksw.sparql_analytics.web.live;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.aksw.sparql_analytics.core.ApiBean;
 import org.aksw.sparql_analytics.core.RequestCount;
+import org.aksw.sparql_analytics.core.UsageCounterIncremental;
 import org.atmosphere.cpr.Broadcaster;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,26 +60,20 @@ public class EventGenerator {
 		private final Broadcaster broadcaster;
 		private final ApiBean apiBean;
 		private final Object queryNotifier;
+		private final UsageCounterIncremental usageCounter;
 		
-		//private final int interval;
-		
-		private DateTime lastSentEvent; // TODO Add time unit
-		private int slotCount = 20;
-		
-		
-		//Timestamp 
 		
 
 		public Generator(Broadcaster broadcaster, ApiBean apiBean, Object queryNotifier) {
 			this.broadcaster = broadcaster;
 			this.apiBean = apiBean;
 			this.queryNotifier = queryNotifier;
-			
-			//this.interval = interval;
+			this.usageCounter = new UsageCounterIncremental(apiBean);
 		}
 
 		@Override
 		public void run() {
+			
 			logger.info("Starting Event Generator Thread");
 			Thread currentThread = Thread.currentThread();
 			while (currentThread == generatorThread) {
@@ -92,27 +88,16 @@ public class EventGenerator {
 					
 					// Once we were notified, we wait for another second before we actually begin our work
 					Thread.sleep(1000);
-					
-					DateTime dt = new DateTime();
-					//int minuteOfDay = dt.minuteOfDay().get();
-					
-					if(lastSentEvent == null) {
-						lastSentEvent = dt.minus(slotCount);
-					}
 
-					List<RequestCount> data;
-					try {
-						data = apiBean.createSummaryHistogram(lastSentEvent.getMillis());
-					} catch (Exception e) {
-						logger.error("Failed to retrieve data from backend", e);
-						continue;
-					}
+					List<RequestCount> data = usageCounter.next();
+					Map<String, Object> eventData = new HashMap<String, Object>();
+					eventData.put("update", data);
 					
 					Gson gson = new Gson();
-					String json = gson.toJson(data);
+					String json = gson.toJson(eventData);
 					
 					broadcaster.broadcast(json);
-					//Thread.sleep(interval);
+					
 				} catch (InterruptedException e) {
 					break;
 				}

@@ -69,4 +69,9 @@ var SparqlAnalytics = {};
 		return result;
 	};
 
+	ns.fillArray = function(len, value) {
+		var result = Array.apply(null, new Array(len)).map(Number.prototype.valueOf, value);
+		return result;
+	};
+	
 })(SparqlAnalytics || (SparqlAnalytics = {}));

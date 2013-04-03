@@ -15,29 +15,29 @@ import java.util.Date;
  *
  */
 public class RequestCount {
-	private Date date;
+	private long timestamp;
 	private int requestCount;
 	
 	public RequestCount() {
 		super();
 	}
 
-	public RequestCount(Date date, int requestCount) {
+	public RequestCount(long timestamp, int requestCount) {
 		super();
-		this.date = date;
+		this.timestamp = timestamp;
 		this.requestCount = requestCount;
 	}
 
-	public Date getDate() {
-		return date;
+	public long getTimestamp() {
+		return timestamp;
 	}
 
 	public int getRequestCount() {
 		return requestCount;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public void setRequestCount(int requestCount) {

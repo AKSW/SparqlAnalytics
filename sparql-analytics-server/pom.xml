@@ -65,12 +65,6 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 
-		<!-- Time Library -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
-
 
 		<!-- Gson: Java to Json conversion -->
 		<dependency>

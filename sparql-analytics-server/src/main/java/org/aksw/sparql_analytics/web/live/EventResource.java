@@ -1,5 +1,9 @@
 package org.aksw.sparql_analytics.web.live;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ws.rs.Consumes;
@@ -15,6 +19,8 @@ import javax.ws.rs.core.Response;
 
 import org.aksw.sparql_analytics.atmosphere.EventListener;
 import org.aksw.sparql_analytics.core.ApiBean;
+import org.aksw.sparql_analytics.core.RequestCount;
+import org.aksw.sparql_analytics.core.UsageCounterIncremental;
 import org.aksw.sparql_analytics.model.Event;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.Broadcaster;
@@ -24,6 +30,8 @@ import org.atmosphere.jersey.SuspendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.google.gson.Gson;
 
 /**
  * <pre>
@@ -106,10 +114,34 @@ public class EventResource
 		
 		//if (bounds != null) resource.getRequest().setAttribute("bounds", bounds);
 		
+		
+		/*
+		 * The client needs to have basic information so that it can
+		 * start inferring 0-query-counts by himself without having to be notified
+		 * that there were no queries in some timespan
+		 * 
+		 */
+		UsageCounterIncremental usageCounter = new UsageCounterIncremental(apiBean);
+
+		Map<String, Object> reset = new HashMap<String, Object>();
+		reset.put("startTimestamp", usageCounter.getStartTimestamp());
+		reset.put("timeWindow", usageCounter.getTimeWindow());
+		
+		Map<String, Object> syncEvent = new HashMap<String, Object>();
+		syncEvent.put("reset", reset);
+
+		List<RequestCount> data = usageCounter.next();
+		syncEvent.put("update", data);
+
+		Gson gson = new Gson();
+		String entity = gson.toJson(syncEvent);
+		
+		
 		return new SuspendResponse.SuspendResponseBuilder<String>()
 				.broadcaster(getBroadcaster())
 				.outputComments(true)
 				.addListener(listener)
+				.entity(entity)
 				.build();
 	}
 

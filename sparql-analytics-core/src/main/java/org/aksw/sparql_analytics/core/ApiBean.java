@@ -5,14 +5,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ApiBean {
-
+	private static final Logger logger = LoggerFactory.getLogger(ApiBean.class);
+	
 	private DataSource dataSource;
 	
 	public ApiBean(DataSource dataSource) throws SQLException {
@@ -39,6 +43,7 @@ public class ApiBean {
 		+ "ORDER BY MIN(\"ts_start\") ASC"
 		;
 
+		logger.debug("Timestamp for database lookup: " + timestamp);
 		System.out.println(sql);
 		Connection conn = dataSource.getConnection();
 		try {
@@ -50,7 +55,10 @@ public class ApiBean {
 					Timestamp ts = rs.getTimestamp("min");
 					Integer count = rs.getInt("count");
 		
-					result.add(new RequestCount(new Date(ts.getTime()), count));
+					//Long t = ts.getTime();
+					DateTime dt = new DateTime(ts).withSecondOfMinute(0).withMillisOfSecond(0);
+					
+					result.add(new RequestCount(dt.getMillis(), count));
 				}
 			}
 			finally {

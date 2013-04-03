@@ -38,6 +38,11 @@
 	
 	ns.createHistogramChartSpec = function(data) {
 		var result = {
+	        animation: {
+	            enabled: true,
+	            duration: 1000,
+	            easing: 'linear'
+	        },
             chart: {
                 renderTo: null,
                 type: 'column' //'bar'
@@ -49,21 +54,42 @@
                 text: "" //"latest datasets"//'metric: ' + data.metricName //Konrad Höffner'
             },
             xAxis: {
-				categories: data.labels,
+				align: 'right',
+				rotation: -45,
+            	type: "datetime"
+            },
+            /*
+            xAxis: {
+				categories: (data && data.labels) ? data.labels : [],
 				labels: {
 					align: 'right',
 					rotation: -45,
+					formatter: function() {
+						console.log("Creating label for x: ", this);
+						var date = new Date(this.value);
+						var result = "" + date.getHours() + ":" + date.getMinutes();
+						debugger;
+						return result;
+					}
 				}
             },
+            */
             yAxis: {
                 title: {
-                    text: null
+                    text: 'Number of queries'
                 }
             },
             tooltip: {
+            	xDateFormat: '%A %H:%M',
+            	valueSuffix: ' Queries',
+            	valuePrefix: ''
+            	/*
                 formatter: function() {
+                	//console.log(this);
+                	//Highcharts.dateFormat('%d %b %Y', this.x);
+                			
                     return this.y +' Queries'; // this.series.name
-                }
+                }*/
             },
             plotOptions: {
 				column: {
@@ -79,9 +105,9 @@
             	enabled: false
             },
             series: [{
-            	name: data.name ? data.name : 'name not set',
+            	name: (data && data.name) ? data.name : 'name not set',
             	showInLegend: true,
-                data: data.data,
+                data: (data && data.data) ? data.data : [],
                 color: '#4572A7'
             }]
         };
