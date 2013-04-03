@@ -70,13 +70,14 @@ public class SparqlEndpoint
 		logger.info("ServiceUri: " + defaultServiceUri);
 		logger.info("Allow Override: " + allowOverrideServiceUri);
 		
+		// TODO I did not think about post requests that do not yield a query string... handle them properly
 		
 		Multimap<String, String> qs = UriUtils.parseQueryString(req.getQueryString());
 		
 		// Collect all interesting Metadata and write it into a GSON object
 		final Map<String, Object> data = new HashMap<String, Object>();
 
-		String queryString = qs.get("query").iterator().next();
+		String queryString = "" + query; //qs.get("query").iterator().next();
 		Collection<String> serviceUris = qs.get("serviceUri");
 		String serviceUri;
 		if(serviceUris == null || serviceUris.isEmpty()) {
