@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Run this file using 'mvn package' -->
+	<!-- Output under target/sparql-analytics-client-{version}/webapp/ -->
+
+	<artifactId>sparql-analytics-client</artifactId>
+	<name>SPARQL Analytics - Client</name>
+	<!-- <packaging>js</packaging> -->
+	<description>SPARQL Analytics JavaScript Client Widgets</description>
+
+	<parent>
+		<groupId>org.aksw.sparql-analytics</groupId>
+		<artifactId>sparql-analytics-parent</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<!-- finalName>sparql-analytics-client</finalName -->
+		<plugins>
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.5.2</version>
+
+				<executions>
+					<execution>
+						<id>default-minify</id>
+						<phase>process-resources</phase>
+
+						<configuration>
+							<jsSourceDir>js</jsSourceDir>
+							<cssSourceDir>css</cssSourceDir>
+
+							<!-- Note: The extra 'webapp' dir is simply there to put target and 
+								src on the same level of nesting, so that relative paths  to resouces work 
+								(e.g. ../../../) either way -->
+							<jsTargetDir>webapp/js</jsTargetDir>
+							<cssTargetDir>webapp/css</cssTargetDir>
+
+							<cssSourceFiles>
+							</cssSourceFiles>
+							<cssFinalFile>sparql-analytics-client-style.css</cssFinalFile>
+
+							<jsSourceFiles>
+								<param>org/aksw/utils/MathUtils.js</param>
+								<param>org/aksw/utils/ChartUtils.js</param>
+								<param>org/aksw/sparql-analytics/app/Charts.js</param>
+								<param>sparql-analytics-utils.js</param>
+								<param>sparql-analytics-widgets-utils.js</param>
+								<param>sparql-analytics-widgets.js</param>								
+							</jsSourceFiles>
+							<jsFinalFile>sparql-analytics-client.js</jsFinalFile>
+
+						</configuration>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

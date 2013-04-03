@@ -11,9 +11,27 @@
 	<name>SPARQL Analytics - Parent</name>
 	<url>http://aksw.org/Projects/SparqlAnalytics</url>
 
+	<developers>
+		<developer>
+			<name>Claus Stadler</name>
+			<email>cstadler@informatik.uni-leipzig.de</email>
+			<roles>
+				<role>lead developer</role>
+			</roles>
+			<organizationUrl>http://aksw.org</organizationUrl>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Agile Knowledge Engineering and Semantic Web</name>
+		<url>http://aksw.org</url>
+	</organization>
+
+
 	<modules>
 		<module>sparql-analytics-core</module>
 		<module>sparql-analytics-server</module>
+		<module>sparql-analytics-client</module>
 	</modules>
 
 
