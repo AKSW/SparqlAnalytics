@@ -11,6 +11,8 @@ A demo can be seen here:
 * [FP7-ICT project partners dataset landing page](http://fp7-pp.publicdata.eu) shows the live chart (unfortunately requires IPv6 - if you know how to proxy websockets, please tell me :)
 * [SNORQL-SPARQL explorer](http://fp7-pp.publicdata.eu/snorql) lets you do the queries (at the moment only Select queries are handled in the live chart)
 
+![Screenshot](https://raw.github.com/AKSW/SparqlAnalytics/master/images/2013-04-04-sparql-analytics-screenshot-fp7-pp.publicdata.eu.png)
+
 
 #### Server Setup
 A note in advance: currently the server is [CORS](http://enable-cors.org) enabled on all paths, so you *and anyone else* should be able to do cross site requests from JavaScript.
